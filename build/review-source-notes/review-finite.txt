@@ -1,0 +1,164 @@
+SWITCHBACK REVIEW: FINITE MEMORY, BALANCING, SURROGATES, DIAGNOSTICS, DECISIONS
+Prepared from local PDFs only, 2026-10-15. Research notes, not manuscript prose.
+All 10 assigned PDFs extracted with pdftotext -layout in this directory.
+Read scope: complete introductions/related work/conclusions; targeted lookup of stated assumptions, estimands and qualifications needed to report them accurately; no proof reading.
+Equation transcription below normalizes pdftotext's damaged mathematical glyphs (minus/equality), bold vectors and spacing, but preserves source indices unless explicitly noted.
+
+1. BOJINOV, SIMCHI-LEVI, ZHAO (2023)
+Source: literature/switchback/Bojinov et al. - 2023 - Design and Analysis of Switchback Experiments 3.pdf
+Title: Design and Analysis of Switchback Experiments.
+Iavor Bojinov, David Simchi-Levi, Jinglong Zhao. Management Science 69(7), 3759-3777, July 2023. Online November 1, 2022. DOI 10.1287/mnsc.2022.4583.
+Read intro pp3759-3761; practical implications/limitations/conclusion pp3774-3775; targeted assumptions p3762 and misspecification p3768.
+Classification: BOTH design and analysis. Single aggregate unit, temporal interference explicitly; spatial interference is addressed by aggregation before analysis, not by estimating spatial spillovers. Estimates average lag-p persistent treatment-v-control contrast; exact sharp-null randomization test plus asymptotic conservative tests and confidence intervals. Finite-population/design-based randomness, fixed potential outcomes.
+Exact carryover assumption, Assumption 2 (m-Carryover Effects), p3762/PDF4:
+"There exists a fixed and given m" such that, for any t in {m+1,...,T}, common suffix w_{t-m:T} and any earlier prefixes w'_{1:t-m-1}, w''_{1:t-m-1},
+Y_t(w'_{1:t-m-1},w_{t-m:T}) = Y_t(w''_{1:t-m-1},w_{t-m:T}).
+Assumption 1 (same page) imposes nonanticipation; together the outcome depends only on w_{t-m:t}.
+Parameter distinction: true memory m vs designer-specified p. Main minimax design first assumes p=m; fair independent coins, optimal randomization points roughly m apart (different boundary blocks). m is a fixed cutoff, not a decay rate, and outcomes are exactly insensitive beyond m. Bounded potential outcomes support worst-case design; nonnegligible variance supports CLT.
+What can be learned: §4.4 compares effect estimates from carefully designed independent comparable experiments (or separated epochs) at two p's, tests H0:m<=p1, then searches. It is not effortless identification from an arbitrary short one-off experiment. Authors' conclusion notes each test needs scale T/m>100, costly when resources are scarce, and tests can fail through insufficient power when m is large relative to T.
+Critical misspecification distinction, §4.3 p3768/PDF10: p>m preserves validity (lag-p contrast essentially same persistent effect but averaging window starts later) and wastes precision. p<m makes HT biased for their intended causal estimand. A normal limit still holds centered on E[hat tau_p], not desired tau_p; exact sharp null of no effects is still testable. Do not summarize their abstract's misspecification robustness as GATE confidence-interval validity under underestimated m.
+Authors' stated limitations: m comparable to T causes high variance; nonadaptive independent coin flips only; optimality applies to their particular persistent-treatment estimand. Practical memory must come from domain knowledge or expensive pilot comparisons.
+Reviewer's interpretation: exact cutoff is plausible for bounded physical/operational latency, difficult for learning, retention, habit formation. Overestimating m is conservative in identification but can exhaust effective sample; underestimating m has a different target/bias, not merely larger standard error.
+
+2. CHEN AND SIMCHI-LEVI (2026)
+Source: literature/switchback/Chen and Simchi-Levi - 2026 - Efficient Switchback Experiments with Surrogate Variables Estimation and Experimental Design.pdf
+Title: Efficient Switchback Experiments with Surrogate Variables: Estimation and Experimental Design.
+Hongyu Chen, David Simchi-Levi. Management Science 72(6), 4854-4870, June 2026; online September 22, 2025; DOI 10.1287/mnsc.2023.03818. Older references may call it "Switchback Experiments in a Reactive Environment" (2023).
+Read intro/related work pp4854-4856; conclusion p4869; targeted assumptions pp4857-4858; practical discussion pp4858-4859 and p4865.
+Classification: BOTH design and analysis. Temporal carryover, all N sampled units share treatment W_t; not a geographic-spillover estimator. Superpopulation iid unit sampling plus randomized assignment, not purely conditional finite population. Persistent ATE is E[Y_it(1_{p+1})-Y_it(0_{p+1})] averaged over t>p. Oracle importance-sampling estimator, plug-in conditional density estimator, near-minimax design, Fisher exact tests and asymptotic CI.
+Exact Assumption 1 (p-Carryover Effect), p4857/PDF4:
+"There exists a positive integer p such that for any t>p," if w_{t-p:t}=w'_{t-p:t}, then Y_it(w_{1:t})=Y_it(w'_{1:t}); and if w_{t-p:t-1}=w'_{t-p:t-1}, then Q_it(w_{1:t-1})=Q_it(w'_{1:t-1}).
+Thus finite memory is retained for both final Y and surrogate Q; this is not an alternative allowing arbitrary infinite carryover.
+Exact Assumption 3 (Surrogacy), p4858/PDF5:
+Y_it independent of W_{t-p:t-1} conditional on (Q_it,X_i,S_t).
+The printed equation omits W_t from the conditioning set; copy as printed if quoting. Do not silently add W_t, although the index h_t(q,w,s,x) elsewhere conditions on current W_t.
+Assumption 4 (Stationarity), p4858: (Y_it(w1),Q_it(w2)) independent of (Y_it'(w1),Q_it'(w2)) conditional on X_i,S_1,...,S_T for t!=t'. Additionally Q_it(w)|(X_i=x,S_t=s) has same distribution as Q_i't'(w)|(X_i'=x,S_t'=s). Y itself need not be stationary. Important: independence of potential outcomes conditional on covariates is stronger than simply allowing any serially correlated stochastic residual; observed outcomes still correlated via assignments.
+Assumption 2 unconfoundedness of W_{1:T} and potential outcomes conditional on S_{1:T} is ensured by controlled assignment.
+Known/chosen/estimated: must choose finite p before design, choose surrogate that fully blocks all historical influence, estimate densities f_w(Q|X,S), and choose density divergence envelope B that controls optimal switching frequency. Algorithm1 p4863 inputs T,p,B. B=1 if surrogate distributions identical, larger B implies longer intervals. p and B can be estimated in pilot/past data (§5.3 p4865): estimate densities for B and two-sample KS tests of Q at candidate remote lags for p. This works within surrogacy/stationarity/assignment assumptions; it does not establish assumptions from arbitrary observational history.
+Oracle versus plug-in caveat: Proposition3 p4860 unbiasedness is oracle with true conditional densities. Conditional densities are replaced by estimated ones in practice; the paper acknowledges general plug-in efficiency analysis is hard, gives a special binary-variable result and simulations. Theorem4 CLT p4865 explicitly concerns oracle IS under assumptions1-4 and third-moment likelihood-ratio/nonnegligible variance bounds. Exact Fisher procedure re-estimates densities per assignment and assumes joint sharp null about Y and Q; this null is stronger than zero average Y effect.
+Authors: choose Q via domain expertise, suggest engagement/customer activity/health; test its observed conditional-independence condition. Need sufficient density overlap and enough observations per lag pattern; restrict interval length >=p so only 2p lag histories arise instead of exponential 2^p. Conclusion urges assessing whether special causal structure is present before using method.
+Reviewer's interpretation: saves switch-transition data by exchanging discarded observations for stronger measurement, surrogacy, stability and density estimation requirements. No general domination if surrogate misses latent channels or density ratios poorly estimated.
+
+3. XIONG, CHIN, TAYLOR (2024)
+Source: literature/switchback/Xiong et al. - 2024 - Data-Driven Switchback Experiments Theoretical Tradeoffs and Empirical Bayes Designs.pdf
+Title: Data-Driven Switchback Experiments: Theoretical Tradeoffs and Empirical Bayes Designs.
+Ruoxuan Xiong, Alex Chin, Sean J. Taylor. arXiv:2406.06768v1, June 10, 2024. Footnote p1 explicitly identifies "Bias-variance tradeoffs for designing simultaneous temporal experiments" as preliminary version; do not count independent study.
+Read intro/contributions/related pp1-6; conclusion p33; targeted carryover assumption p21 and definitions pp9-10.
+Classification: BOTH design and analysis, focused on bias/MSE decomposition and empirical design choice rather than a new generally valid CI theorem. One aggregate geographic market; temporal interference and interaction with simultaneous interventions, not explicit spatial spillovers. GATE holds simultaneous interventions at control. Continuous time/event-stream framework; naive current-assignment HT generally biased for global effect in presence of carryover.
+Exact Assumption 4.2 (Carryover effects), p21, with normalized d notation:
+For every t, exists kernel d_t^{co}(t') with integral d_t^{co}(t') f(t') dt' = 1, such that
+delta_t^{co}(w_t) = delta_t^{co} integral w_{t'} d_t^{co}(t') f(t') dt'.
+Here delta_t^{co}=delta_t^{co}(1_t), and f is event density. Authors explicitly call additive kernel structure an expository assumption relaxable at notational cost. Kernel can have finite support h or infinite geometrically decaying tails; no single finite h/geometric decay imposed throughout. Nonanticipation corresponds to kernel zero for t'>t. Assumption4.1 p20 says events independently sampled from f, f independent of treatments of primary and simultaneous interventions.
+Known/chosen/estimated: no exact memory cutoff required to compute naive HT; optimal design critically depends on carryover curve, seasonality, serial outcome correlation and simultaneous-experiment overlap. Empirical Bayes method estimates distribution of cumulative effect curves (CECs) from earlier experiment-market pairs, uses historical data and synthetic experiments to compare candidates. It assumes those prior dynamics inform new experiments; not automatic identification of current unknown long-run response.
+Nuance: longer intervals reduce carryover bias but can increase serial-correlation/design variance; balancing weekly periodicity and randomizing interval endpoints can matter more. Empirical case reports 33% MSE reduction; do not universalize. 68% fitted CECs change sign as treatment duration changes; delayed effects need not be monotone, undermining generic monotone-decay/same-sign heuristics for every setting.
+Authors' conclusion: design critically depends on prior knowledge/assumptions; historical experiments useful. Reviewer's interpretation: practical realism improves by handling four sources of error, at price of empirical transport of historical CEC distributions; bias/MSE optimization does not itself supply valid inference for a persistent estimand.
+
+4. MISSAULT ET AL. (2025)
+Source: literature/switchback/Missault et al. - 2025 - Robust and efficient multiple-unit switchback experimentation.pdf
+Paul Missault, Lorenzo Masoero, Christian Delbe, Thomas Richardson, Guido Imbens.
+Title as filename. Cover June17,2025; arXiv:2506.12654v1 stamp June14,2025. Working paper.
+Read intro/related pp1-4, conclusion p18; targeted assumptions pp5-6.
+Classification: BOTH design and analysis. Multiple items/time, RBSDs doubly balance each item's treated periods and each period's treated item count. Temporal carryover; explicitly NO cross-item spillover (Assumption1), not a spatiotemporal interference solution. Estimands ATE and lag-l trimmed persistent ATE, HT unbiasedness and variance estimation; empirical testing/power.
+Exact Assumption4 (m-Carryover Effects), p6:
+"There exists a fixed and given m" in {1,...,S-1}; for common suffix W_{n,s-m:S},
+Y_{n,s}(W'_{n,1:s-m-1},W_{n,s-m:S}) = Y_{n,s}(W''_{n,1:s-m-1},W_{n,s-m:S}).
+The displayed source has a mismatch in quantified prefix index (s-m+1) versus equation (s-m-1); quote equation and describe meaning rather than reproduce typo. With nonanticipation, Y_ns depends at most on own current and m prior assignments. Baseline Assumption3 has NO carryover; later relaxes to exact finite bound.
+Assumption1 p5: all results rely on no cross-item spillovers. The authors explicitly discuss competing/substitute goods as violations and suggest clustering; formal extension with clustering future work. Do not infer that multiple units means modeled geographical spillover.
+Known/chosen/estimated: m or safe upper bound supplied beforehand; set lag l>=m and regular block duration accordingly. It is not estimated in the core method. Conclusion calls future work tests for carryover and tuning assumed upper bound; optimality of RBSD among designs also future work.
+Authors' conclusion: efficient when unit metrics skewed; theoretical and e-commerce simulations/online experiments demonstrate gains. Reviewer: balancing gains conditional on chosen exposure model; wrong m can bias, clustering no longer guaranteed to eliminate all inter-item substitution.
+
+5. MISSAULT AND MASOERO (2025)
+Source: literature/switchback/Missault and Masoero - 2025 - Carryover Detection in Switchback Experimentation.pdf
+Paul Missault, Lorenzo Masoero. Title as filename. NeurIPS2025 workshop CauScien: Uncovering Causality in Science, workshop manuscript, not full main-conference paper.
+Read intro p1, full short setup pp2-3, conclusion p4. No separate related-work heading.
+Classification: ANALYSIS/DIAGNOSTIC, not optimized design. Multiple units, temporal carryover; no unit spillover Assumption1. Tests insufficient truncation lag via differences of carryover-aware HT estimators, not a complete general GATE inference framework.
+Exact Assumption2 (m-Carryover Effects), p2:
+"There exists a fixed duration m" such that Y_{n,t+m+1}(W)=Y_{n,t+m+1}(W') for any W,W' differing only at or before t for unit n. Thus an exact finite cutoff under the formal setup, although introduction says m may be infinite generally.
+For theory use additive linear effects Eq3 p3:
+Y_{i,t}(W_{i,1:t}) = mu_i + alpha_{i,t} + delta^(0) W_{i,t} + delta^(1) W_{i,t-1} + ... + delta^(m) W_{i,t-m} + epsilon_{i,t}.
+Theorem1 assumes fair-coin randomization and aligned same time window l'>=l+1. Difference E[hat tau_{l,l'} - hat tau_{l+1,l'}] = 0 if l>=m, = -delta^(l+1) if l<m. General lag-J comparison responds to sum of omitted coefficients delta^(l+1),...,delta^(l+J).
+Parameters: candidate l selected, true m unknown; test probes unaccounted lag effects without new experiments. Uses t/normal approximation and bootstrapped standard errors; no claim it proves an upper bound. Authors explicitly: cannot confirm l is tight upper bound; power depends on effect magnitude/pattern; general effects models future work.
+Reviewer's caution: nonrejection cannot validate absence of distant effects. Single-lag test blind when delta^(l+1)=0 but a later lag nonzero; multi-lag sums can cancel with opposite signs. Xiong's nonmonotonicity reinforces need for lag range/sensitivity analysis. No consistency/validity guarantee for arbitrary nonlinear temporal interference merely because a diagnostic does not reject.
+
+6. MASOERO ET AL. (2023; LOCAL PDF EXPANDED MARCH2024)
+Source: literature/switchback/Masoero et al. - 2023 - Efficient Switchback Experiments via Multiple Randomization Designs.pdf
+Lorenzo Masoero, Guido Imbens, Thomas Richardson, James McQueen, Suhas Vijaykumar, Ido Rosen. Cover November1,2023; page headers "A PREPRINT - MARCH27,2024". Contains short 3pp introduction/conclusion plus appendices, not two separate studies.
+Read main discussion pp1-3; targeted appendix setup p5 and remark p6.
+Classification: BOTH design and analysis in no-interference special case. Jointly item/time balanced allocation; design-based unbiased ATE and variance estimates/bounds. No geographic or temporal interference in theorem: exact two potential outcomes per item-time, y_ns(1),y_ns(0). Text p5: "We assume here no interference".
+No finite/decay memory parameter in central result because carryover assumed ZERO. The Gaussian two-way random-effects model motivates efficiency comparisons; general randomization variance identities do not require that Gaussian outcome law.
+Conclusion p3: if confident carryover lasts only S periods, restrict switches to fixed times (say every2S) and use only outcomes after effects exhausted. This is a suggestion relying on a known safe finite horizon, not general robust-carryover theory in this paper; later Missault2025 formalizes extension.
+Reviewer: important baseline showing switchback benefits can come from balancing unit/time effects, even with no interference. Must not list as spatial-spillover handling just because MRDs elsewhere address spillovers.
+
+7. A BALANCED DESIGN OF TIME SERIES EXPERIMENTS (2022 ANONYMOUS LOCAL COPY)
+Source: literature/switchback/12_a_balanced_design_of_time_seri.pdf
+LOCAL COVER IS "Anonymous Author(s)" with generic affiliation/address/email. Footer: "Submitted to A causal view on dynamical systems workshop at NeurIPS2022. Do not distribute." No named authors visible. Existing correspondence attributes Ni/Bojinov/Zhao, but cannot verify from this local version; parent should verify primary metadata or cite anonymous 2022 workshop submission. Unresolved [?] reference in text.
+Read intro p1, conclusion p9; no separately headed literature review; targeted assumption p2 and inference pp6-7.
+Classification: BOTH design and analysis. Single aggregate unit, temporal carryover; population spillover addressed by aggregation, no spatial model. Balanced treatment totals to improve power; persistent total treatment effect, IPW estimator, asymptotic inference and confidence intervals.
+Exact Assumption1 (Limited carryover effects), p2:
+Y_t(w_{1:T}) = Y_t(w'_{1:T}) whenever w_{t-1:t}=w'_{t-1:t}.
+Thus exact first-order and nonanticipating. Authors say can extend to m>1 but focus m=1; choose period duration at least carryover duration, e.g. one hour for 30-60-minute pricing effect. This re-expresses requirement for known safe physical memory bound; it does not estimate or remove memory uncertainty.
+Assumption2 p3 bounded nonnegative potential outcomes [0,B], B not needed for design (existence sufficient). Nonnegligible variance supports CLT. Design fixes balanced first T-1 assignments and sets W_T=W_1 to handle boundaries. Near-optimal/suboptimal worst-case guarantee, not universal exact optimality.
+Conclusion p9: balanced design lowers variance and improves testing/inference; panel extension future work. Reviewer: first-order approximation credible only for sufficiently coarse periods and intervention-specific bound; coarse aggregation trades away time resolution/sample size.
+
+8. NI AND BOJINOV (2025)
+Source: literature/switchback/Enhancing Efficiency and Robustness for Switchback Experiments A Practical Model-assisted Design and Analysis.pdf
+ACTUAL title inside: Enhancing Efficiency and Robustness for Switchback Experiments: A Model-assisted Design and Analysis (no "Practical" in current title).
+Tu Ni, Iavor Bojinov. No date printed; metadata creation2025-07-24; cite2025 working paper with local-version caveat. Prior references call it Practical Model-assisted.
+Read intro/related pp1-8; conclusion pp33-34; targeted assumptions pp9,14,18-19 and inference pp25-26.
+Classification: BOTH but primarily DESIGN (authors say so). Single aggregate unit, temporal interference; no explicit geographic spillover. Historical time-series modeling guides seasonal balancing, adaptive assignment and temporal coupling. Does not commit to model for outcome identification, but maintains carryover restrictions and variance conditions. General infinite-order carryover, not just fixed finite window or required geometric rate.
+Assumption1 p9 nonanticipation only: for w_{1:t}=w'_{1:t}, Y_t(w_{1:T})=Y_t(w'_{1:T})=Y_t(w_{1:t}). Explicitly permits first assignment to affect final outcome.
+Exact Assumption2 p14 Eq8, visually verified:
+For t in[T], let phi_t(q) be a decreasing function in q>=1 such that
+max_{w_{1:t-q},w'_{1:t-q}} |Y_t(w_{1:t-q},d)-Y_t(w'_{1:t-q},d)| <= phi_t(q), for all d in{0,1}^q.
+Author prose: "we do not assume a certain order of decay for phi_t(p)." Wording says impact vanishes with q, but displayed inequality plus decreasing does not separately state a formal limit0. Do not silently add a specified exponential rate. General result is a bias bound, not rate-optimal MSE theorem.
+Theorem2 p15 Eq9: |tau(Y)-bar tau(Y,eta)| <= (2/T) sum_t [rho phi_t(3)+(1-rho)phi_t(2)]. rho controls number of valid two-period exposures; rho T observations deterministic and split equally across seasonal slots. More rho means longer unchanged runs/bias bound lower, variance need not monotone. Refinement adds rho+ and temporal coupling.
+Parameter distinction: investigator chooses period duration, seasonal block/cycle length, rho and rho+. History estimates seasonality/autocorrelation, not true nonparametric carryover envelope phi. Under ILLUSTRATIVE latent AR model gamma, phi decays geometrically when |gamma|<1. Authors p16 propose estimate gamma from preexperimental time series, increase period duration/refit until omitted-effect fraction tolerable. This is a model-assisted sensitivity proposal, not identification of exact memory or universal guarantee under time-series misspecification.
+Estimator target distinction essential: two-period HT is unbiased for GATE tau only if actual carryover lasts<=1 period. Generally bar tau(Y,eta)=E_eta[hat tau] differs from global tau. Theorem5 p25 Eq25 explicitly (hat tau-E[hat tau])/sqrt(Var_eta(hat tau)) -> Normal(0,1). Following paragraph explicitly says bias stays fixed as T grows; consistency for tau requires estimator adapt to T and extra dynamic assumptions. Do not claim GATE CI coverage merely from this CLT.
+Exact Assumption3 p18 covariance identity (same source notation):
+S^{1,0}_{b,b'} + S^{0,1}_{b,b'} = S^{1,1}_{b,b'} + S^{0,0}_{b,b'} - S^{tau}_{b,b'}.
+The S quantities involve conditional means of treatment/control two-period potential outcomes over historical random assignments. Authors p18-19 give sufficient conditions: exact if carryover<=1; or earlier histories shift both treated and control outcomes equally so treatment contrasts invariant; blockwise same response can suffice. Habituation interactions may violate; authors acknowledge real-world imperfection, adopt idealized identity for analytic convenience. Variance conclusions conditional on this must not be described as completely assumption-free.
+Further inference caveat p26 Proposition1 Eq29: E[estimated variance] equals true variance plus treatment-effect heterogeneity term minus unidentified conditional-covariance residual of indeterminate sign. Bound involves phi(2)^2 and tails sum_{q>=3}phi(q)^2, products. Text: expectation "approximately covers the true variance" when phi decays fast e.g. geometrically and K large. Generic monotonically diminishing effects do NOT alone establish fully conservative estimated standard errors. State approximate/practical status; residual bias and variance approximation separate.
+Authors conclude efficiency/stability improvement, mainly design, ML estimation and other contexts future work. Reviewer: strong practical feature deterministic useful sample size/seasonal balance; historical forecast misspecification may reduce gains but not automatically invalidate randomization. However valid randomization is distinct from unbiased global estimand/valid standard errors under unrestricted infinite history.
+
+9. NI (2025)
+Source: literature/switchback/Decision Analytics of Switchback Experiments A.pdf
+Tu Ni. Title: Decision Analytics of Switchback Experiments: A Robust Optimization Approach. No date printed; metadata creation2025-05-25. Cite2025 working paper.
+Read intro/related pp1-6, conclusion/discussion pp25-26; targeted assumptions pp8,10,21.
+Classification: ANALYSIS/DECISION with experiment DESIGN TAKEN AS GIVEN (explicit §6.1 p25). Single aggregate unit, temporal interference extension, no spatial model. Minimax treatment-v-control rollout based on worst-case simple regret. Contrasts with, complements, and screens before conventional tests; not merely a confidence-interval method nor a new optimal switchback design.
+Baseline Assumption1 p8 no temporal interference: Y_t(w_{1:T})=Y_t(w'_{1:T}) if w_t=w'_t. Assumption2 p8 bounded support [0,C]. These apply first; then §5 relaxes zero carryover.
+Exact Assumption3 (Lipschitz continuity), p10 Eq10:
+"There exists a constant L" such that |Y_{t+1}(w)-Y_t(w)|<=L for each adjacent pair.
+Known/chosen/estimated: define bound C, smoothness L; p11 suggests estimate L from historical data assuming treatment does not alter underlying smoothness much. Closed-form simple-case optimal action independent of L after cancellation, but underlying uncertainty set must still contain truth and generic carryover optimization retains constraints. Risk preference gamma tuned/calibrated (simulations to match TypeI=0.1). Do not present calibrated finite-scenario TypeI as distribution-free finite-sample theorem.
+Carryover extension §5 pp20-22: switch every l periods using fair coin; choose neighborhood b for local potential outcomes, not given true cutoff. Paper explicitly says Y_t(1_{b+1}) approximates Y_t(1). Does not assume known m exact finite horizon. Need account for truncation discrepancy when interpreting global deployment/regret.
+Exact Assumption4 (Diminishing carryover effects), p21 Eq31, visually verified. At each t, 1<=m<=b, for any prefix w:
+|Y_t(w,1_m,0_{b+1-m})-Y_t(w,1_{m-1},0_{b+2-m})|
+ >= |Y_{t+1}(w,1_m,0_{b+2-m})-Y_{t+1}(w,1_{m-1},0_{b+3-m})|,
+and
+|Y_t(w,0_m,1_{b+1-m})-Y_t(w,0_{m-1},1_{b+2-m})|
+ >= |Y_{t+1}(w,0_m,1_{b+2-m})-Y_{t+1}(w,0_{m-1},1_{b+3-m})|.
+1_k and0_k denote all-one/all-zero length k vectors. IMPORTANT m here is an index1,...,b, not a true-memory parameter known/estimated. Assumption imposes diminishing absolute effect of a one-treatment perturbation as lag increases, without an exponential rate or exact horizon. Authors explicitly compare to rapid mixing but say no exponential stabilization imposed. Mixed-integer LP incorporates smoothness plus monotonic constraints to exploit transition observations.
+Authors' discussion: design optimization beyond scope; bounded [0,C] may not suit nonstationary peaks, could use predictions; personalized contextual policies and other interference future work. Robust optimization is complement/first-stage screening, not substitute for statistical uncertainty.
+Reviewer's interpretation: relaxation of rate knowledge exchanges it for outcome smoothness/monotonic response assumptions. These are not innocuous in nonmonotonic operational feedback dynamics; Xiong's CEC sign changes show possible tension, though a nonmonotonic cumulative curve and Ass4 perturbation monotonicity are mathematically distinct, so do not claim one directly falsifies the other.
+
+10. ZENG ET AL. (2026)
+Source: literature/switchback/Zeng et al. - 2026 - Sequentially-Rerandomized Switchback Experiments.pdf
+Zhenghao Zeng, Christopher Adjaho, Alonso Bucarey, Chao Qin, Ruixuan Zhang, Paul Hoban, Ramesh Johari, Stefan Wager. arXiv:2604.02489v1, April2,2026. Working paper.
+Read intro/related pp1-3, discussion pp23-24; targeted assumptions pp4-5 and first-order estimation/inference pp12-14.
+Classification: BOTH design and analysis. Multiple operational units, temporal dependence; explicit Assumption2 NO cross-unit spillover. Geography/cluster motivation does not equal spatial-interference theory. Sequential adaptive rerandomization balances variables formed from contemporaneous covariates and observed lagged outcomes. Finite-population design-based.
+Exact Assumption3(b), pp4-5:
+For each unit i, t>=2, if w_{i,t}=w'_{i,t} and w_{i,t-1}=w'_{i,t-1}, then
+Y_{i,t}(w_{i,1:T})=Y_{i,t}(w'_{i,1:T})=Y_{i,t}(w_{i,t-1},w_{i,t}).
+Ass3(a) zero carryover for first setting. Ass1 nonanticipation, Ass2 no-spillover. Finite exact FIRST-order memory in theorem, not generic mixing.
+Known/chosen/estimated: first-order adequacy assumed at chosen time scale. Authors p13 suggest aggregate periods e.g. two hours if exposure affects next two hours. Need choose prognostic variables H_it, balance criterion/threshold c and max rerandomizations; these are not memory estimates. Adaptive outcomes used improve balance without requiring a correct prognostic response model, but own-treatment histories matter for no-spillover and memory conditions.
+Targets: no-carryover SATE average Y_it(1)-Y_it(0); first-order SATE average t>=2 [Y_it(1,1)-Y_it(0,0)]. Blocked variant stratifies by previous assignment so stay-treated/stay-control groups each N/4, stable sizes.
+Inference distinction: finite-sample randomization inference under sharp null is developed no-carryover; asymptotic martingale CLT there. Under first-order carryover, exact randomization needs three restrictions among four potential outcomes, hard to specify; paper explicitly focuses asymptotic inference (mixingale arguments, prediction-based conservative variance). Do not attribute general exact test to first-order setting.
+Discussion pp23-24 openly states infinite-order carryover and cross-unit spillovers as future extensions; finite-order approximation can have nonnegligible bias, shown by MDP-style simulation; no free robustness to these violations. Sharper variance future work.
+
+CROSS-PAPER SYNTHESIS
+- These papers treat different objects: optimization of assignment, estimation/inference, detection of carryover misspecification, and treatment-choice regret. A yes/no 'causal inference' column should distinguish all four; testing and causal estimation overlap rather than being mutually exclusive.
+- Exact memory assumptions (Bojinov, Chen, Missault, balanced2022, Zeng) need an upper bound measured in chosen periods. Coarsening period length does not remove uncertainty about the physical upper bound. Overestimated bound and underestimated bound have different consequences.
+- Infinite-memory alternatives here are not all geometric: Xiong permits broad kernels and learns historical CECs; Ni/Bojinov bounds history sensitivity by unspecified decreasing phi; Ni Decision bounds monotonic marginal effect shrinkage without rate. In the latter two, no required geometric rate does not mean global-effect estimation/coverage is automatic.
+- Distinguish outcome-model fit used only to guide design from maintained interference conditions needed to identify persistent effects and from extra regularity needed for variance estimation/CLT. Correct randomization alone does not make local-history outcomes equal to permanent-deployment outcomes.
+- Multiple items/geographies does not imply cross-unit interference modeled: Missault and Zeng assume none; Chen all units share W and superpopulation independence; Masoero central theorem none. Spatial interference handled elsewhere (Jia/Ni panel papers).
+- Pilot data/historical data cannot prove absence of small distant effects or learn arbitrary intervention-specific carryover from untreated baseline only. Dynamics of untreated series can guide sensible tuning but a new policy can change response persistence. Diagnostic nonrejection is not a certified safe horizon.
+- Lineage: Xiong2023 preliminary vs2024 expanded same program; Chen2023 reactive environment vs2026 surrogate paper likely same lineage; Masoero2023 main+March2024 appendices one file; anonymous2022 balanced manuscript is distinct from2025 model-assisted PDF and authors should not be guessed from unavailable local metadata.

@@ -1,0 +1,160 @@
+\begin{thebibliography}{xx}
+
+\harvarditem[Basse et~al.]{Basse, Ding \harvardand\ Toulis}{2023}{basse2023}
+Basse, G., Ding, Y. \harvardand\ Toulis, P.  \harvardyearleft 2023\harvardyearright , `{Minimax Designs for Causal Effects in Temporal Experiments with Treatment Habituation}', {\em Biometrika} {\bf 110}(1),~155--168.
+\newblock Reviewed June 2020 preprint v2.
+\newline\harvardurl{https://arxiv.org/abs/1908.03531v2}
+
+\harvarditem[Blanchet et~al.]{Blanchet, Glynn, Johari, Wu \harvardand\ Xing}{2026}{blanchet2026}
+Blanchet, J., Glynn, P.~W., Johari, R., Wu, L. \harvardand\ Xing, W.  \harvardyearleft 2026\harvardyearright , {Conservative Inference in Switchback Experiments}, {\em in} `Proceedings of the 29th International Conference on Artificial Intelligence and Statistics', Vol. 300 of {\em Proceedings of Machine Learning Research}, pp.~2422--2430.
+\newline\harvardurl{https://proceedings.mlr.press/v300/blanchet26a.html}
+
+\harvarditem[Bojinov et~al.]{Bojinov, Rambachan \harvardand\ Shephard}{2021}{bojinovpanel2021}
+Bojinov, I., Rambachan, A. \harvardand\ Shephard, N.  \harvardyearleft 2021\harvardyearright , `{Panel Experiments and Dynamic Causal Effects: A Finite Population Perspective}', {\em Quantitative Economics} {\bf 12}(4),~1171--1196.
+\newblock Reviewed May 2021 preprint v5.
+\newline\harvardurl{https://arxiv.org/abs/2003.09915v5}
+
+\harvarditem{Bojinov \harvardand\ Shephard}{2019}{bojinovshephard2019}
+Bojinov, I. \harvardand\ Shephard, N.  \harvardyearleft 2019\harvardyearright , `{Time Series Experiments and Causal Estimands: Exact Randomization Tests and Trading}', {\em Journal of the American Statistical Association} {\bf 114}(528),~1665--1682.
+\newblock Reviewed July 2017 preprint v2.
+\newline\harvardurl{https://arxiv.org/abs/1706.07840v2}
+
+\harvarditem[Bojinov et~al.]{Bojinov, Simchi-Levi \harvardand\ Zhao}{2023}{bojinov2023}
+Bojinov, I., Simchi-Levi, D. \harvardand\ Zhao, J.  \harvardyearleft 2023\harvardyearright , `{Design and Analysis of Switchback Experiments}', {\em Management Science} {\bf 69}(7),~3759--3777.
+
+\harvarditem{Chen \harvardand\ Simchi-Levi}{2026}{chen2026}
+Chen, H. \harvardand\ Simchi-Levi, D.  \harvardyearleft 2026\harvardyearright , `{Efficient Switchback Experiments with Surrogate Variables: Estimation and Experimental Design}', {\em Management Science} {\bf 72}(6),~4854--4870.
+\newblock Published online in 2025; reviewed 2026 journal version.
+
+\harvarditem[Farias et~al.]{Farias, Li, Peng \harvardand\ Zheng}{2022}{farias2022}
+Farias, V.~F., Li, A.~A., Peng, T. \harvardand\ Zheng, A.  \harvardyearleft 2022\harvardyearright , {Markovian Interference in Experiments}, {\em in} `Advances in Neural Information Processing Systems', Vol.~35, pp.~535--549.
+\newblock Reviewed June 2022 preprint v2.
+\newline\harvardurl{https://arxiv.org/abs/2206.02371v2}
+
+\harvarditem[Ferrari-Ortiz et~al.]{Ferrari-Ortiz, Orellana-Montini, Abbiasov, Garkavenko \harvardand\ Lit}{2026}{ferrari2026}
+Ferrari-Ortiz, N., Orellana-Montini, S., Abbiasov, T., Garkavenko, M. \harvardand\ Lit, R.  \harvardyearleft 2026\harvardyearright , `{Cluster-Level Experiments using Temporal Switchback Designs: Precision Gains in Pricing {A/B} Tests at {LATAM} Airlines}', arXiv:2603.04252v1.
+\newline\harvardurl{https://arxiv.org/abs/2603.04252v1}
+
+\harvarditem[Glynn et~al.]{Glynn, Johari \harvardand\ Rasouli}{2020}{glynn2020}
+Glynn, P.~W., Johari, R. \harvardand\ Rasouli, M.  \harvardyearleft 2020\harvardyearright , {Adaptive Experimental Design with Temporal Interference: A Maximum Likelihood Approach}, {\em in} `Advances in Neural Information Processing Systems', Vol.~33, pp.~15054--15064.
+\newblock Reviewed December 2022 preprint v2.
+\newline\harvardurl{https://arxiv.org/abs/2006.05591v2}
+
+\harvarditem{Guo \harvardand\ Liang}{2026}{guoliang2026}
+Guo, W. \harvardand\ Liang, T.  \harvardyearleft 2026\harvardyearright , `{Experimental Design When {N} Equals One}', arXiv:2606.28200v2.
+\newblock Reviewed July 2026 version.
+\newline\harvardurl{https://arxiv.org/abs/2606.28200v2}
+
+\harvarditem{Hu}{2026}{hu2026}
+Hu, Y.  \harvardyearleft 2026\harvardyearright , `{Spectral Design of Random-Duration Switchbacks}', arXiv:2609.13698v1.
+\newline\harvardurl{https://arxiv.org/abs/2609.13698v1}
+
+\harvarditem{Hu \harvardand\ Wager}{2025}{huwager2025}
+Hu, Y. \harvardand\ Wager, S.  \harvardyearleft 2025\harvardyearright , `{Switchback Experiments under Geometric Mixing}', arXiv:2209.00197v4.
+\newblock Reviewed December 2025 version; first posted in 2022.
+\newline\harvardurl{https://arxiv.org/abs/2209.00197v4}
+
+\harvarditem[Jia et~al.]{Jia, Kallus \harvardand\ Yu}{2025}{jia2025}
+Jia, S., Kallus, N. \harvardand\ Yu, C.~L.  \harvardyearleft 2025\harvardyearright , `{Clustered Switchback Designs for Experimentation under Spatio-temporal Interference}', arXiv:2312.15574v5.
+\newblock Reviewed March 2025 version.
+\newline\harvardurl{https://arxiv.org/abs/2312.15574v5}
+
+\harvarditem{Jiang \harvardand\ Ding}{2025}{jiangding2025}
+Jiang, Z. \harvardand\ Ding, P.  \harvardyearleft 2025\harvardyearright , `{Principled Analysis of Crossover Designs: Causal Effects, Efficient Estimation, and Robust Inference}', arXiv:2511.09215v3.
+\newblock Reviewed August 2026 version.
+\newline\harvardurl{https://arxiv.org/abs/2511.09215v3}
+
+\harvarditem[Johari et~al.]{Johari, Peng \harvardand\ Xing}{2025}{johari2025}
+Johari, R., Peng, T. \harvardand\ Xing, W.  \harvardyearleft 2025\harvardyearright , `{Estimation of Treatment Effects under Nonstationarity via the Truncated Policy Gradient Estimator}', arXiv:2506.05308v3.
+\newblock Reviewed June 2026 version.
+\newline\harvardurl{https://arxiv.org/abs/2506.05308v3}
+
+\harvarditem[Li et~al.]{Li, Johari, Kuang \harvardand\ Wager}{2026}{li2026}
+Li, S., Johari, R., Kuang, X. \harvardand\ Wager, S.  \harvardyearleft 2026\harvardyearright , `{Experimenting under Stochastic Congestion}', arXiv:2302.12093v6.
+\newblock Reviewed August 2026 version.
+\newline\harvardurl{https://arxiv.org/abs/2302.12093v6}
+
+\harvarditem{Liang \harvardand\ Recht}{2025}{liangrecht2025}
+Liang, T. \harvardand\ Recht, B.  \harvardyearleft 2025\harvardyearright , `{Randomization Inference When {N} Equals One}', {\em Biometrika} {\bf 112}(2),~asaf013.
+\newblock Reviewed September 2024 preprint v2.
+\newline\harvardurl{https://arxiv.org/abs/2310.16989v2}
+
+\harvarditem{Lin \harvardand\ Ding}{2025}{linding2025}
+Lin, Z. \harvardand\ Ding, P.  \harvardyearleft 2025\harvardyearright , `{Unifying Regression-Based and Design-Based Causal Inference in Time-Series Experiments}', arXiv:2510.22864v1.
+\newline\harvardurl{https://arxiv.org/abs/2510.22864v1}
+
+\harvarditem{Liu \harvardand\ Zhong}{2026}{liuzhong2026}
+Liu, J. \harvardand\ Zhong, L.  \harvardyearleft 2026\harvardyearright , `{Randomization Tests in Switchback Experiments}', arXiv:2602.23257v2.
+\newblock Reviewed September 2026 version.
+\newline\harvardurl{https://arxiv.org/abs/2602.23257v2}
+
+\harvarditem[Masoero et~al.]{Masoero, Imbens, Richardson, McQueen, Vijaykumar \harvardand\ Rosen}{2023}{masoero2023}
+Masoero, L., Imbens, G., Richardson, T., McQueen, J., Vijaykumar, S. \harvardand\ Rosen, I.  \harvardyearleft 2023\harvardyearright , `{Efficient Switchback Experiments via Multiple Randomization Designs}', Conference on Digital Experimentation at MIT.
+\newblock Reviewed Amazon Science manuscript, including March 2024 preprint material.
+\newline\harvardurl{https://www.amazon.science/publications/efficient-switchback-experiments-via-multiple-randomization-designs}
+
+\harvarditem{Missault \harvardand\ Masoero}{2025}{carryover2025}
+Missault, P. \harvardand\ Masoero, L.  \harvardyearleft 2025\harvardyearright , {Carryover Detection in Switchback Experimentation}, {\em in} `NeurIPS 2025 Workshop on Uncovering Causality in Science'.
+\newline\harvardurl{https://www.amazon.science/publications/carryover-detection-in-switchback-experimentation}
+
+\harvarditem[Missault et~al.]{Missault, Masoero, Delb{\'e}, Richardson \harvardand\ Imbens}{2025}{missault2025}
+Missault, P., Masoero, L., Delb{\'e}, C., Richardson, T. \harvardand\ Imbens, G.  \harvardyearleft 2025\harvardyearright , `{Robust and Efficient Multiple-Unit Switchback Experimentation}', arXiv:2506.12654v1.
+\newline\harvardurl{https://arxiv.org/abs/2506.12654v1}
+
+\harvarditem{Ni}{2025}{ni2025decision}
+Ni, T.  \harvardyearleft 2025\harvardyearright , `{Decision Analytics of Switchback Experiments: A Robust Optimization Approach}', SSRN working paper 5245482.
+\newblock Reviewed local manuscript; file metadata dated May 25, 2025.
+\newline\harvardurl{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5245482}
+
+\harvarditem{Ni \harvardand\ Bojinov}{2025}{ni2025model}
+Ni, T. \harvardand\ Bojinov, I.  \harvardyearleft 2025\harvardyearright , `{Enhancing Efficiency and Robustness for Switchback Experiments: A Model-assisted Design and Analysis}', SSRN working paper 5229804.
+\newblock Reviewed local manuscript; file metadata dated July 24, 2025.
+\newline\harvardurl{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5229804}
+
+\harvarditem[Ni et~al.]{Ni, Bojinov \harvardand\ Zhao}{2022}{ni2022}
+Ni, T., Bojinov, I. \harvardand\ Zhao, J.  \harvardyearleft 2022\harvardyearright , {A Balanced Design of Time Series Experiments}, {\em in} `NeurIPS 2022 Workshop: A Causal View on Dynamical Systems'.
+\newblock Local PDF is anonymized; authors identified by the workshop programme.
+\newline\harvardurl{https://openreview.net/pdf?id=rfaIJ4ahtw2}
+
+\harvarditem[Ni et~al.]{Ni, Bojinov \harvardand\ Zhao}{2024}{nipanel2024}
+Ni, T., Bojinov, I. \harvardand\ Zhao, J.  \harvardyearleft 2024\harvardyearright , {Design of Panel Experiments with Spatial and Temporal Interference}, Technical Report 24-058, Harvard Business School.
+\newblock Reviewed 2024 HBS copy, rather than the revised 2026 SSRN manuscript.
+\newline\harvardurl{https://www.hbs.edu/ris/Publication%20Files/24-058_ac99caf6-d732-408b-a6c8-4d039e245bc6.pdf}
+
+\harvarditem{Pankratev}{2026{\em a}}{pankratev2026variance}
+Pankratev, S.  \harvardyearleft 2026{\em a}\harvardyearright , `{Design-Aware Variance Reduction for Switchback Experiments: A Comparative Study}', arXiv:2606.27662v2.
+\newblock Reviewed August 2026 version.
+\newline\harvardurl{https://arxiv.org/abs/2606.27662v2}
+
+\harvarditem{Pankratev}{2026{\em b}}{pankratev2026power}
+Pankratev, S.  \harvardyearleft 2026{\em b}\harvardyearright , `{Powerful Switchback Experiments---Or Not?}', arXiv:2606.03012v1.
+\newline\harvardurl{https://arxiv.org/abs/2606.03012v1}
+
+\harvarditem[Shi et~al.]{Shi, Wang, Luo, Zhu, Ye \harvardand\ Song}{2023}{shi2023}
+Shi, C., Wang, X., Luo, S., Zhu, H., Ye, J. \harvardand\ Song, R.  \harvardyearleft 2023\harvardyearright , `{Dynamic Causal Effects Evaluation in {A/B} Testing with a Reinforcement Learning Framework}', {\em Journal of the American Statistical Association} {\bf 118}(543),~2059--2071.
+\newblock Reviewed November 2022 preprint v6.
+\newline\harvardurl{https://arxiv.org/abs/2002.01711v6}
+
+\harvarditem[Sun et~al.]{Sun, Kong, Zhu \harvardand\ Shi}{2024}{sun2024}
+Sun, K., Kong, L., Zhu, H. \harvardand\ Shi, C.  \harvardyearleft 2024\harvardyearright , `{{ARMA}-Design: Optimal Treatment Allocation Strategies for {A/B} Testing in Partially Observable Experiments}', arXiv:2408.05342v4.
+\newblock Reviewed January 2025 version; title follows the local PDF.
+\newline\harvardurl{https://arxiv.org/abs/2408.05342v4}
+
+\harvarditem[Wen et~al.]{Wen, Shi, Yang, Tang \harvardand\ Zhu}{2025}{wen2025}
+Wen, Q., Shi, C., Yang, Y., Tang, N. \harvardand\ Zhu, H.  \harvardyearleft 2025\harvardyearright , {Unraveling the Interplay between Carryover Effects and Reward Autocorrelations in Switchback Experiments}, {\em in} `Proceedings of the 42nd International Conference on Machine Learning', Vol. 267 of {\em Proceedings of Machine Learning Research}, pp.~66481--66519.
+\newline\harvardurl{https://proceedings.mlr.press/v267/wen25d.html}
+
+\harvarditem[Wu et~al.]{Wu, Wen, Zhang, Zhu, Li \harvardand\ Shi}{2026}{wu2026}
+Wu, X., Wen, Q., Zhang, Y., Zhu, H., Li, T. \harvardand\ Shi, C.  \harvardyearleft 2026\harvardyearright , {Designing Time Series Experiments in {A/B} Testing with Transformer Reinforcement Learning}, {\em in} `International Conference on Learning Representations'.
+\newline\harvardurl{https://arxiv.org/abs/2602.01853v1}
+
+\harvarditem[Xiong et~al.]{Xiong, Chin \harvardand\ Taylor}{2024}{xiong2024}
+Xiong, R., Chin, A. \harvardand\ Taylor, S.~J.  \harvardyearleft 2024\harvardyearright , `{Data-Driven Switchback Experiments: Theoretical Tradeoffs and Empirical {Bayes} Designs}', arXiv:2406.06768v1.
+\newblock Reviewed June 2024 version; extends the 2023 workshop paper.
+\newline\harvardurl{https://arxiv.org/abs/2406.06768v1}
+
+\harvarditem[Zeng et~al.]{Zeng, Adjaho, Bucarey, Qin, Zhang, Hoban, Johari \harvardand\ Wager}{2026}{zeng2026}
+Zeng, Z., Adjaho, C., Bucarey, A., Qin, C., Zhang, R., Hoban, P., Johari, R. \harvardand\ Wager, S.  \harvardyearleft 2026\harvardyearright , `{Sequentially-Rerandomized Switchback Experiments}', arXiv:2604.02489v1.
+\newline\harvardurl{https://arxiv.org/abs/2604.02489v1}
+
+\end{thebibliography}

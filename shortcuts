@@ -1,0 +1,5 @@
+Action	Shortcut
+Compile	Ctrl + Alt + B
+Open the PDF preview	Ctrl + Alt + V
+Jump from your source cursor to the corresponding PDF location	Ctrl + Alt + J
+Jump from the PDF back to the source	Ctrl + click in the PDF

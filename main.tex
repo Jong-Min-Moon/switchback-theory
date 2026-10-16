@@ -1,0 +1,201 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{setspace,microtype}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{graphicx}
+\usepackage{url,xurl}
+\usepackage[round,authoryear]{natbib}
+\usepackage{caption}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{bookmark}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{0.3em}
+\setcounter{tocdepth}{2}
+\captionsetup{font=small,labelfont=bf}
+\urlstyle{same}
+\let\harvardurl\url
+\hypersetup{
+ pdftitle={Switchback Experiments: Design, Inference, and the Credibility of Carryover Assumptions},
+ pdfauthor={},
+ pdfkeywords={temporal interference, experimental design, randomization inference, causal estimands, carryover},
+ pdfcreator={LaTeX}}
+\title{\textbf{Switchback Experiments: Design, Inference, and the Credibility of Carryover Assumptions}}
+\author{}
+\date{October 2026}
+\bibliographystyle{agsm}
+
+\begin{document}
+\singlespacing
+\maketitle
+\begin{abstract}
+Switchback experiments repeatedly randomize treatment over time, often within an aggregate marketplace or operational unit. They can reduce interference between simultaneously treated and untreated users, but create difficult questions about how historical assignments affect current outcomes. This focused review synthesizes 34 supplied papers and related methodological studies, emphasizing their stated carryover assumptions, the quantities those assumptions require researchers to know or choose, and the causal targets their procedures actually address. We distinguish exact finite memory, geometric mixing, declining history sensitivity, observed-state models, linear impulse responses, and simulator-based design. We also separate assignment optimization, estimation, confidence intervals, hypothesis tests, diagnostics, precision studies, and rollout decisions. The comparison identifies a recurring inferential gap: a local-exposure estimator can be asymptotically normal while retaining bias for a permanent-policy effect. The memory scale is sometimes supplied as a design input, sometimes constrained only through an existence assumption, and sometimes replaced by stronger structural information. Credible applications should justify these commitments separately, report sensitivity to their calibration, and distinguish absence of detected carryover from evidence that a chosen horizon is sufficient.
+\end{abstract}
+\noindent\textit{Keywords:} temporal interference; experimental design; causal inference; dynamic treatment effects; carryover; randomization inference.
+\clearpage
+\tableofcontents
+\clearpage
+\setstretch{1.8} % DON'T change the spacing!
+
+\section{Introduction and scope}\label{sec:introduction}
+
+Switchback experiments assign a treatment repeatedly to the same system over time. They are especially useful when individual randomization is infeasible or when users compete for shared resources, so that treating one user changes another's outcome. Aggregating an interacting population into a marketplace, region, or item cluster can make the treatment contrast easier to interpret. However, yesterday's treatment can affect today's inventory, supply, behavior, or system state. Switching the assignment does not necessarily switch the outcome-generating process immediately.
+
+The literature consequently addresses several different problems under the same experimental label. Some papers choose assignment sequences to reduce worst-case estimation error. Others estimate dynamic or long-run causal effects, construct uncertainty statements, diagnose a misspecified carryover horizon, compare power, or make deployment decisions. Their temporal assumptions also differ. An exact last affected lag, a mixing time, a stable autoregressive coefficient, and an observed sufficient state express different restrictions. Calling each of them a carryover parameter obscures what must be supplied before an experiment and what the data can actually learn.
+
+This review is organized around those distinctions. It examines the 34 PDFs supplied in the project's literature collection, including closely related time-series, panel, crossover, and dynamic-policy methods. It is a focused review of that collection, not an exhaustive systematic search or quantitative meta-analysis. Following the review protocol, we read introductions, related-work sections, and discussions or conclusions, then made narrow lookups of assumptions, estimand definitions, and qualifications needed to reproduce the carryover restrictions accurately. We do not independently verify proofs or rank all methods by a common empirical benchmark.
+
+The unit of comparison is the reviewed manuscript version. Publication years in citations do not always coincide with the local PDF's revision date. In particular, \citet{huwager2025} is the December 2025 fourth version; \citet{nipanel2024} is the 2024 Harvard working paper rather than its revised 2026 successor. The local copies underlying \citet{basse2023} and \citet{liangrecht2025} are respectively 2020 and 2024 preprints of later journal publications. Several files catalogued as 2025 contain 2026 revisions, recorded in the bibliography. The local \citet{ni2022} submission is anonymized; authorship follows the \href{https://sites.google.com/view/caudyn2022/accepted-papers}{official workshop programme}. These distinctions matter when later versions change estimands or inferential guarantees.
+
+\section{A framework for comparing claims}\label{sec:framework}
+
+\subsection{An experimental design does not determine a unique estimand}
+
+For exposition, let $W_t\in\{0,1\}$ denote the treatment assigned at time $t$, and let $Y_t(w_{1:t})$ be a nonanticipating potential outcome. This is normalized review notation, not an assertion that every source imposes nonanticipation in the same way. A finite-horizon global treatment effect is
+\begin{equation}\label{eq:global-effect}
+ \tau_T=\frac{1}{T}\sum_{t=1}^{T}
+ \left\{Y_t(\mathbf{1}_{1:t})-Y_t(\mathbf{0}_{1:t})\right\},
+\end{equation}
+with a specified common initial condition or pre-experiment history. This compares policies applied throughout the observed horizon. In a panel, one can additionally average across units. Spatial interference requires indexing outcomes by the relevant treatment matrix, not merely the unit's own treatment.
+
+A recent-run contrast instead changes the last $q$ assignments while keeping, conditioning on, or averaging over an earlier history. General lagged incremental effects can change a single assignment and average over subsequent assignments. Neither construction automatically equals Equation~\eqref{eq:global-effect}. Equality needs a suitable exposure restriction or an approximation argument. A stationary reward contrast concerns policy-specific equilibrium distributions; a discounted value contrast weights future outcomes from a reference initial state; a local policy derivative measures an infinitesimal change. These are useful targets with different interpretations, not interchangeable estimates of one universal effect.
+
+A simple review example makes the distinction concrete. Suppose
+\[
+ Y_t=\mu_t+\beta_0W_t+\beta_1W_{t-1}+\epsilon_t,
+\]
+with independent fair assignments and mean-zero noise independent of them. Comparing current treated and control observations targets $\beta_0$, because the previous assignment is balanced in expectation. Sustained treatment versus sustained control, after the initial boundary, has effect $\beta_0+\beta_1$. A precise estimate of the first contrast can be misleading for the second even though treatment is randomized. This example is illustrative rather than a result attributed to a particular source.
+
+\subsection{Three distinct knowledge requirements}
+
+A method may require a scientific restriction without requiring its numerical parameter as an estimator input. For example, a central limit theorem can assume some finite mixing constant exists, while computing an average needs no such value. A recommended burn-in that explicitly multiplies that constant is a different matter. Conversely, a chosen truncation length is an analyst's tuning parameter, not proof that effects vanish beyond it. We therefore distinguish maintained existence assumptions, operational inputs, and estimated nuisance quantities throughout the review.
+
+The distinction extends to spatial structure. Aggregating users can reduce within-market interference while leaving dependence between geographic or item clusters. A paper using multiple regions may still assume no spillover between them. Only methods that specify and handle such exposure warrant a spatial-interference classification. Similarly, autocorrelation in untreated outcomes is not itself treatment-induced carryover: persistent weather shocks and treatment-induced resource changes can produce superficially similar time series with different causal implications.
+
+Table~\ref{tab:comparison} records the main contribution and endpoint of each supplied study. D denotes design, A analysis, and D+A both. Endpoint codes are E for causal estimation, C for confidence intervals, H for hypothesis testing, V for variance or estimation-error analysis, P for power, and R for a deployment decision. They summarize the contribution emphasized in the reviewed version; a design paper may use an estimator without establishing a new general inference procedure. The detailed sections supply the restrictions behind each abbreviated entry.
+
+\begin{singlespace}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.18}
+\begin{longtable}{P{3.2cm}P{0.9cm}P{1.8cm}P{4.5cm}P{1.3cm}P{3.3cm}}
+\caption{Contribution, interference scope, and inferential endpoint in the supplied collection.}\label{tab:comparison}\\
+\toprule
+Study & Work & Scope & Carryover restriction or required information & Output & Target or qualification\\
+\midrule
+\endfirsthead
+\multicolumn{6}{l}{\textit{Table \thetable\ continued}}\\
+\toprule
+Study & Work & Scope & Carryover restriction or required information & Output & Target or qualification\\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\textit{Continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\citet{bojinov2023} & D+A & Temporal & Exact finite order $m$; specify $p$; pilot comparisons proposed & E,C,H & Persistent contrast; underestimating memory biases it\\
+\citet{liuzhong2026} & A & Temporal & same assuption as \cite{bojinov2023} & E,H & Partially sharp and weak nulls; lower bound on persistence\\
+\citet{ni2022} & D+A & Temporal & 1-carryover. preliminary version of \cite{bojinov2023} presented at NeeurIPS worksop; period length chosen to cover persistence & E,C,H,V & Balanced single-unit exposure\\
+\citet{masoero2023} & D+A & None in baseline & No cross-unit or temporal interference in central analysis & E,V & Balanced unit--time ATE\\
+\citet{missault2025} & D+A & Temporal & Given finite $m$, lag covering $m$; no cross-item spillover & E,V,P & Regular balanced multi-unit exposure\\
+\citet{zeng2026} & D+A & Temporal & Zero or exact first-order carryover; no spillovers & E,C,H & Exact H without carryover; asymptotic C with carryover\\
+\citet{chen2026} & D+A & Temporal & Finite $p$, sufficient surrogate, stable conditional densities, divergence bound & E,C,H & Oracle and plug-in guarantees differ\\
+\citet{xiong2024} & D+A & Temporal; simultaneous policies & General additive kernel; prior cumulative-effect curves & E,V & Global effect holding other policies fixed\\
+\citet{ni2025model} & D+A & Temporal & Decreasing history envelope; chosen clock, balance and coupling & E,V,C & CLT centered at estimator expectation\\
+\citet{ni2025decision} & A & Temporal extension & Outcome smoothness and diminishing perturbation effects & R & Design given; minimax rollout regret\\
+\citet{carryover2025} & A & Temporal & Additive lag effects for diagnostic theory; candidate lag chosen & H & Reject insufficient lag; nonrejection is not certification\\
+\citet{huwager2025} & D+A & Temporal & Uniform geometric contraction; calibrated burn-in and blocks & E,C,V & Filtered effect versus corrected GATE\\
+\citet{jia2025} & D+A & Temporal + spatial & Geometric contraction, graph, exposure restrictions & E,V & Global policy effect; graph-dependent rates\\
+\citet{hu2026} & D+A & Temporal & Exact finite $m$ supplied to duration design & E,V & Spectral MSE and random run durations\\
+\citet{glynn2020} & D+A & Temporal & Observed finite state, stationary irreducible chains, exploration & E,V & Difference of stationary rewards\\
+\citet{blanchet2026} & A & Temporal & Geometric convergence plus monotonicity restrictions & E,V & Transient versus stationary effect; conservative inference conditions\\
+\citet{wen2025} & D+A & Temporal & Observed Markov state, repeated daily trajectories, estimator-specific stability & E,V & Cadence depends on carryover and residual dependence\\
+\citet{farias2022} & A & Temporal & Observed state, mixed-policy mixing, small transition perturbation & E,V & Stationary effect with approximation bias\\
+\citet{shi2023} & A & Temporal & Sufficient stationary Markov state and geometric ergodicity & E,C,H & Discounted value contrast; sequential testing\\
+\citet{li2026} & D+A & Temporal & Structural finite-capacity queue; growing interval lengths & E,C & Local stationary throughput derivative\\
+\citet{sun2024} & D & Temporal & Stable controlled ARMA; orders and coefficients estimated & E,V & Small-signal design optimality\\
+\citet{wu2026} & D & Temporal & Full observed history and counterfactual simulation environment & V & Learned allocation for supplied estimator\\
+\citet{johari2025} & A & Temporal & Uniform contraction; truncation, perturbation and mean-stability restrictions & E,C,V & GATE approximation; expectation-centered CLT\\
+\citet{bojinovshephard2019} & A & Temporal & General history; nonanticipating assignment; positivity & E,C,H & Lagged contrasts need no finite cutoff\\
+\citet{bojinovpanel2021} & A & Temporal & General own-unit history; no cross-unit interference & E,C,H & Dynamic panel causal effects\\
+\citet{linding2025} & A & Temporal & Independent assignment; coupling decay or growing finite memory & E,C,H & Lag effects; conservative HAC inference\\
+\citet{liangrecht2025} & A & Temporal & Linear invariant impulse response; tail and concentration conditions & E,C & Response functionals, not arbitrary histories\\
+\citet{guoliang2026} & D & Temporal & Fixed finite impulse-response order $K$; model-based design & E,V & Target-dependent Markov assignments\\
+\citet{jiangding2025} & A & Temporal & Sequence support; optional finite memory and effect restrictions & E,C,H & Crossover identification; restriction tests\\
+\citet{basse2023} & D & Temporal & Main habituation model; finite pulse decay only for recycling & E,V & Pulse/wedge targets; not all-history cutoff\\
+\citet{nipanel2024} & D+A & Temporal + spatial & One-period memory and known spatial neighborhood & E,C & Local 2024 panel exposure model\\
+\citet{ferrari2026} & A & None in generator & Contemporaneous effect; calibrated serial correlation & V,P & Applied cadence/precision comparison\\
+\citet{pankratev2026power} & A & None in baseline & Contemporaneous treatment and multilevel shocks & V,P & Cluster-size imbalance and power\\
+\citet{pankratev2026variance} & A & Temporal + spatial in simulation & Specified three-lag and spatial contamination generators & V,P & Adjustment comparison; no general interference remedy\\
+\end{longtable}
+\endgroup
+\end{singlespace}
+
+\input{sections/carryover}
+\input{sections/inference}
+
+\section{Rollout decisions under temporal restrictions}\label{sec:decisions}
+
+The inferential endpoint can itself change the appropriate assumptions and objective. \citet{ni2025decision} take an experimental design as given and compare worst-case simple regret from adopting treatment or retaining control. Their baseline bounded-outcome uncertainty set yields a familiar inverse-propensity comparison. Refinement uses the temporal restriction
+\begin{equation}\label{eq:decision-smoothness}
+ |Y_{t+1}(w)-Y_t(w)|\leq L,
+\end{equation}
+reproduced from Assumption~3 \citep[Eq.~(10), p.~10]{ni2025decision}. This constrains adjacent outcomes under the same assignment, rather than saying that the treatment effect itself is constant. Historical data can inform $L$ if treatment does not materially change smoothness; that transfer is a scientific assumption, not a consequence of randomization.
+
+Their carryover extension chooses a neighborhood $b$ and imposes diminishing effects of a historical treatment perturbation. One of the two inequalities in Assumption~4 is
+\begin{align}\label{eq:decision-monotonicity}
+ &\left|Y_t(w,\mathbf{1}_{m},\mathbf{0}_{b+1-m})
+       -Y_t(w,\mathbf{1}_{m-1},\mathbf{0}_{b+2-m})\right|\notag\\
+ &\quad\geq
+ \left|Y_{t+1}(w,\mathbf{1}_{m},\mathbf{0}_{b+2-m})
+       -Y_{t+1}(w,\mathbf{1}_{m-1},\mathbf{0}_{b+3-m})\right|,
+ \qquad 1\leq m\leq b.
+\end{align}
+This copies Equation~(31) with typography normalized; the second inequality swaps zeros and ones throughout \citep[p.~21]{ni2025decision}. Here $m$ indexes perturbations within the chosen neighborhood: it is not an assumed known maximum lag. The inequalities require declining absolute influence but specify neither a geometric rate nor an exact last affected period.
+
+These restrictions allow transition observations to constrain unobserved outcomes in a robust optimization problem. They should still be assessed against the intervention: abrupt peak demand can challenge smoothness, while delayed feedback can challenge monotonic perturbation effects. A selected neighborhood also approximates permanent exposure. The paper's simulation comparisons calibrate a risk-preference parameter to match false-positive rates in the scenarios studied; they do not establish an unrestricted finite-sample testing guarantee. The contribution is a decision rule under an uncertainty set, with conventional inference serving a complementary role.
+
+\section{Critical synthesis and research priorities}\label{sec:synthesis}
+
+\subsection{What normality and precision leave unresolved}
+
+A useful common decomposition, introduced here as review notation, is
+\begin{equation}\label{eq:error-decomposition}
+ \widehat\tau-\tau_T
+ =\underbrace{\widehat\tau-\mathbb{E}(\widehat\tau)}_{\text{assignment or sampling fluctuation}}
+ +\underbrace{\mathbb{E}(\widehat\tau)-\tau_T}_{\text{target discrepancy}}.
+\end{equation}
+A variance estimator and central limit theorem address the first term. Exact memory, correctly specified exposure, controlled truncation tails, or a justified structural model address the second. When effects remain after the chosen window, increasing precision can sharpen an estimate around the wrong target. Model-assisted balancing, policy-gradient approximations, and practical adjustment studies all make this distinction visible in different ways.
+
+For an interval intended to cover $\tau_T$, the discrepancy must vanish relative to the standard error, or be covered by a defensible bias allowance. If a valid fluctuation interval has half-width $a_T$ and a scientifically justified deterministic bound is $|\mathbb{E}(\widehat\tau)-\tau_T|\leq B_T$, enlarging its half-width to $a_T+B_T$ is a direct conservative implication. This elementary review calculation does not estimate $B_T$ from the data. If the bound is itself uncertain, that uncertainty also requires treatment. Reporting standard errors alone cannot substitute for it.
+
+\subsection{Which assumptions are credible, and for which intervention?}
+
+No single carryover model is uniformly most realistic. Exact memory can be credible for a known processing deadline but implausible for durable learning. Geometric mixing permits persistent tails, yet uniform contraction across states, policies and times can be demanding. An observed-state method avoids specifying a last lag only if the measured state captures the pathways carrying earlier effects. Linear impulse-response models permit long histories while ruling out nonlinear interactions and time-varying response kernels. Simulator-based optimization shifts attention toward whether a fitted simulator predicts counterfactual sustained-policy trajectories.
+
+These are alternative information commitments, not a hierarchy in which weaker-looking notation always implies safer inference. Historical seasonality can support balancing without revealing how a novel policy changes memory. A simulator reproducing baseline autocorrelation can still miss policy-induced behavioral adaptation. Calibration should therefore separate untreated outcome dependence, treatment-induced transition changes, and the longer-run response relevant to deployment.
+
+Spatial aggregation creates a related tradeoff. Larger clusters can better contain interference but leave fewer independently randomized units and greater heterogeneity. Smaller clusters increase nominal replication while requiring stronger exposure modeling. The known neighborhood in a finite spatial model and the graph-based exposure probabilities in a clustered mixing model require distinct justifications. Cluster-level standard errors alone do not remove contamination across cluster boundaries.
+
+\subsection{A reporting sequence and open problems}
+
+A defensible report should state the intervention, unit, observation clock, initial condition, and causal target; separate assignment from the carryover or exposure model; and identify required bounds, estimated nuisance quantities, and their data sources. It should distinguish estimates, intervals, sharp and weak null tests, diagnostics, and deployment decisions. Sensitivity to longer memory, alternative decay envelopes, and spatial contamination should accompany precision claims. This reporting sequence is our synthesis.
+
+Several research needs follow. Horizon diagnostics need power guarantees against distant, weak, nonlinear, or cancelling effects and valid inference after selection. Model-assisted designs need bias-aware intervals under unknown persistent carryover. Adaptive designs need methods combining long memory and cross-unit exposure. Structural and simulator-based methods need checks of intervention-induced dynamics beyond baseline fit. Comparisons should align causal targets, initial conditions, observed state information, and pilot-data and computational costs before recommending a cadence or estimator.
+
+\section{Conclusion}
+
+Switchback research now spans fixed-window designs, persistent dynamics, adaptive allocation, diagnostics, and rollout decisions. Its central practical challenge is connecting short experimental exposure to the policy effect of interest. Finite memory, decay restrictions, observed states, and simulators supply that connection under different information commitments. A credible analysis should state those commitments, distinguish sampling uncertainty from target discrepancy, and report sensitivity to temporal and spatial assumptions. Better precision alone cannot establish that an experiment identifies the effect of sustained deployment.
+
+\clearpage
+\begin{singlespace}
+\small
+\bibliography{switchback-review}
+\end{singlespace}
+\end{document}

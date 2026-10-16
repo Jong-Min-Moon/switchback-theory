@@ -1,0 +1,12 @@
+{
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.outDir": "%DIR%/build",
+
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.view.pdf.tab.editorGroup": "right",
+
+  "[latex]": {
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": false
+  }
+}

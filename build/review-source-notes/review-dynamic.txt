@@ -1,0 +1,453 @@
+READING RECORD: DYNAMIC / MARKOV / PARTIAL OBSERVABILITY PAPERS
+2026-10-15. Read local PDFs via pdftotext -layout. Scope: abstract, introduction,
+related work, discussion/conclusion. Narrow lookups of model/assumption statements,
+design inputs and estimand/CLT centering only; no proof deep dive. Page references
+below refer to PDF pages (which mostly coincide with printed pages). Author claims
+and reviewer's assessment are separated. This is not a systematic review beyond
+the supplied corpus, and no current publication metadata was independently browsed.
+
+1. HU AND WAGER
+Exact local first page: Yuchen Hu and Stefan Wager, "Switchback Experiments under
+Geometric Mixing". arXiv:2209.00197v4 [stat.ME], 13 Dec 2025; Draft December 2025.
+Scope: BOTH design/tuning and analysis; temporal carryover, with whole-system
+treatment used to avoid cross-unit spillover rather than separately estimating a
+spatial interference graph. Causal estimation (GATE, filtered ATE), conservative
+asymptotic confidence intervals, not primarily sharp-null randomization testing.
+Read: introduction/related work pp1-4, discussion p21; narrow model pp4-7,
+tuning pp10,13, CLT statements pp11-15.
+
+Model/assumptions (verbatim short statements and exact equations):
+Assumption 1 p4: "For all time points t = 1, ..., T, the evolution of the underlying
+state S_t is governed by a pair of (deterministic) state transition distributions"
+P_t^0, P_t^1 with S_{t+1}|F_t,Y_t ~ P_t^{W_t}(.|S_t). Also Y_t=mu_t(S_t,W_t)+epsilon_t,
+mutually independent noises, E[epsilon_t|F_t]=0 and Var[epsilon_t|F_t]<=sigma^2.
+Assumption 2 p5: "There exists a mixing time t_mix < infinity such that, for all
+time points t = 1, ..., T and w in {0,1},"
+  ||f'P_t^w-fP_t^w||_TV <= exp(-1/t_mix)||f'-f||_TV
+"for any pair of distributions f and f' on S_t."
+The finite horizon t_mix is a contraction scale, NOT an exact last nonzero lag.
+Past treatment effects may persist forever but contract exponentially. The
+time-specific transition/reward functions may vary arbitrarily; slow/persistent
+effects that accumulate are excluded by uniform contraction (p5 explanation).
+
+Known values / nuisance distinction:
+Assumption 2 is an existence statement and does not itself say t_mix is known.
+The rate-guaranteeing tuning in Corollary3 p10 uses b=(t_mix/2)log T, l=b+C1;
+the bias-corrected GATE tuning likewise depends on t_mix (p13).
+Thus implementing those particular guarantees requires a defensible mixing-scale
+bound or tuning rule; the estimators themselves require neither observing states
+nor fitting transition kernels. The paper explicitly emphasizes this in related
+work p3. Simulations p20 use domain knowledge such as typical ride duration to
+choose block length conservatively, not an asserted known latent state model.
+
+Important version-specific author claims:
+Naive DM without burn-in has best worst-case RMSE O(T^-1/3) for GATE in their
+nonstationary model. Burn-in DM estimates a filtered average treatment effect,
+which excludes selected periods; it may differ from GATE under arbitrary temporal
+heterogeneity. Corollary3 p10 obtains near T^-1/2 RMSE for ordinary burn-in DM
+against GATE ONLY IF FATE-GATE=O(sqrt(log T/T)). Bias-corrected weighted estimator
+can target full GATE at near-parametric rate. Discussion p21 explicitly contrasts
+changing target to FATE with using bias correction to retain GATE.
+Reviewer's assessment: a known exact m is replaced by a uniform quantitative decay
+condition, not eliminated dependence knowledge. A short ride-duration statistic
+need not certify mixing of all latent operational and behavioral states. Do not
+write that ordinary burn-in always fixes GATE estimation or that geometric mixing
+is empirically verified simply because no state is required.
+
+2. HU (SPECTRAL)
+Yuchen Hu, "Spectral Design of Random-Duration Switchbacks". Columbia University;
+arXiv:2609.13698v1 [stat.ME], 12 Sep 2026; Draft September 2026.
+Scope: BOTH (design-centered with HT error analysis); temporal only. Estimates
+finite-horizon continuous-time global average effect. MSE/minimax design,
+not a supplied confidence-interval or sharp-null testing theory in the reviewed
+front matter. Read intro/related pp1-4; no standalone conclusion, last main
+paragraph p18; narrow assumption p6 and Algorithm1 p14.
+
+Assumption 1 (Finite carryover and non-anticipation), p6, verbatim:
+"There is a carryover horizon m > 0 such that, for any two assignment paths w
+and w',"
+  w(s)=w'(s) for every s in [t-m,t] => Y_t(w)=Y_t(w').
+Assumption2 p7 bounded pure outcomes |Y_t(1)|<=B, |Y_t(0)|<=B a.e. t.
+Assumption3 p9 requires absolute integrability of the design covariance kernels.
+Potential outcomes fixed, arbitrary temporal variation; no Markovian state needed.
+Known values: exact m appears in pure-exposure eligibility, exposure probability
+p_G=E[(R-m)_+]/(2E[R]), and design Algorithm1 p14 explicitly says "Input: Carryover
+horizon m > 0 and experimentation horizon T > 0." Hence chosen m is an actual
+analysis/design input, not merely an existence constant. Can conservatively use
+a valid upper bound, at the cost of fewer pure exposure observations.
+Authors: stationary alternating-renewal assignment lets run durations be design
+primitive; two-rate age-dependent switching lowers asymptotic worst-case MSE by
+at least 32% relative to regular Bernoulli fixed-block switchback, within specified
+criterion/classes. End p18: randomization without lattice alone helps little;
+run-age-dependent hazard yields gains across tested outcome frequencies.
+Reviewer's assessment: this attacks timing regularity, not unknown/nonzero-tail
+carryover; no finite m learning or sensitivity guarantee should be attributed.
+
+3. JIA, KALLUS AND YU
+Su Jia, Nathan Kallus, Christina Lee Yu, "Clustered Switchback Designs for
+Experimentation Under Spatio-temporal Interference". arXiv:2312.15574v5 [math.ST],
+26 Mar 2025. Cornell University.
+Scope: BOTH; temporal AND network/spatial interference jointly. Causal estimation
+of all-units/all-times GATE, finite-sample MSE guarantees; introduction does not
+promise CIs or sharp-null testing. Read intro/related pp1-4 and discussion 3.2 p9;
+narrow setup/assumptions pp5-7 and tuning p9. No final standalone conclusion.
+
+Assumption1 (Rapid Mixing), p6, verbatim:
+"There exists a constant t_mix > 0 such that for any i in U, t in [T],
+w in {0,1}^{N(i)} and distributions f, f' over S, we have"
+  d_TV(f P_it^w, f' P_it^w) <= e^(-1/t_mix) d_TV(f,f').
+The dependence of each individual's next state on that individual's own current
+state and treatments of its graph neighbors is an exact local structure. State
+evolutions are independent across individuals conditional on treatments (pp3,5).
+States need not be observed, p5 explicitly: "We emphasize that we do not assume
+observation of the state variables."
+Assumption2 p6: conditionally mean-zero uncorrelated noises across individuals and
+times, variance bounded sigma^2. Assumption3 (delta-FNE) p6: for a in {0,1} and
+w s.t. ||w-a1||_1 <= delta|N(i)|, mu_it^w=mu_it^{a1} and P_it^w=P_it^{a1}.
+delta=0 recovers exact neighborhood interference; positive delta assumes invariance
+to a specified small fraction of discordant neighbor treatments (not decay).
+Known values: interference graph/neighborhoods and chosen clustering/exposure rule
+are used for exposure probability weighting. t_mix's assumption is existence,
+but Theorem1 p9 chooses l=r=t_mix log(NT), requiring an operational mixing bound
+to invoke that concrete rate. delta is part of specified exposure model; it cannot
+be treated as learned automatically. The temporal truncation is deliberately
+misspecified relative to infinite memory; mixing bounds its bias.
+Authors claim near 1/(NT) MSE up to logs for good sparse/geometric clusterings;
+the graph-dependent exposure factor is crucial. Discussion p9 notes fixed block
+length can be externally imposed and r can be tuned separately.
+Reviewer's assessment: separately useful extension beyond temporal switchback;
+knowledge burden includes graph and contraction scale. Conditional cross-unit state
+independence rules out many network propagation mechanisms even though assignments
+spill over through neighbors; do not describe as fully general interacting MDP.
+
+4. WEN ET AL.
+Qianglin Wen, Chengchun Shi, Ying Yang, Niansheng Tang, Hongtu Zhu,
+"Unraveling the Interplay between Carryover Effects and Reward Autocorrelations in
+Switchback Experiments". ICML 2025, PMLR267. Local first page has no arXiv stamp.
+Scope: BOTH (comparing/tuning designs for several existing RL estimators);
+temporal only (city-wide treatment; spatial randomization explicitly different).
+Finite-day cumulative all-treatment/all-control ATE; estimation/MSE primary,
+bootstrap CIs studied empirically and discussion relates efficiency to testing power.
+Read intro/related pp1-3, discussion/impact pp9-10; narrow setup pp3-6,
+assumption AppendixD pp22-23 only to copy regularity.
+
+Model p4 (verbatim key conditional assumption):
+  Pr(S_{t+1}=s'|A_t,S_t,{S_j,A_j,R_j}_{j<t})=p_t(s'|A_t,S_t),
+  E(R_t|A_t=a,S_t=s,{S_j,A_j}_{j<t})=r_t(a,s).
+Residual e_t=R_t-r_t(A_t,S_t) can be temporally correlated. State features S_t
+are observed; trajectories (days) are assumed i.i.d., allowing within-day time
+inhomogeneity p_t,r_t. This is not Hu-Wager arbitrary single-trajectory setting.
+No exact cutoff m: their m denotes assigned treatment duration, not assumed
+carryover horizon. Carryover-strength parameter p6:
+  delta=max_{s,t} sum_{s'} |p_t(s'|1,s)-p_t(s'|0,s)|.
+Do not confuse delta with decay speed: it is treatment-induced kernel difference.
+For the OLS model p5, equation(1):
+  r_t(A_t,S_t)=alpha_t+S_t' beta_t+gamma_t A_t,
+  E(S_{t+1}|A_t,S_t)=phi_t+Phi_t S_t+Gamma_t A_t.
+Assumption4 p22, verbatim: "For any 1 <= t <= T, ||Phi_t||_2 <= rho_Phi for
+some constant 0 < rho_Phi < 1." This is model-specific contraction/stability;
+not a finite carryover window. Different estimator results use subsets of
+regularity assumptions. AppendixD Assumption6: transition functions uniformly
+bounded away from zero and infinity. It would be inaccurate to impose linearity
+on every estimator: LSTD/DRL allow nonlinear approximations under their conditions.
+Known values: algorithm estimates OLS coefficients, value functions and density
+ratios. rho_Phi and delta appear as theoretical constants/conditions, not explicitly
+known prior inputs. Workflow p9 asks practitioners to discretize until Markov
+condition reasonable, assess carryover magnitude, then residual correlation;
+requires credible data/structural assessment, not a supplied exact cutoff.
+Authors: with small carryover and positive residual autocorrelation, frequent
+switches can improve efficiency across RL estimators; strong carryover or negative
+correlation favors less switching/alternating day. Uncorrelated errors yields
+asymptotic equivalence under weak carryover. Impact statement warns of significant
+carryover, complex spatial interactions, high switch costs, rapidly changing systems.
+Reviewer's assessment: useful demonstration that "more frequent always worse"
+is false when estimators model dynamics, but results depend on observability,
+between-day independence and correct/adequate nuisance estimation. No universal
+best switch rate should be inferred from residual correlation alone.
+
+5. BLANCHET ET AL.
+Jose Blanchet, Peter W. Glynn, Ramesh Johari, Linjia Wu, Wenqian Xing,
+"Conservative Inference in Switchback Experiments". AISTATS2026, PMLR300,
+Tangier, Morocco (first-page publication line).
+Scope: ANALYSIS-centered; fixed alternating design with implications for length/
+washout choice rather than an optimized randomization theory. Temporal only.
+Steady-state ATE, bias and variance analysis, asymptotic inference/power/coverage
+(Appendix A). Read intro/related pp1-3, conclusion p8; narrow assumptions p3.
+
+Assumption3 (Mixing time), p3, verbatim:
+"For each kappa in {0,1}, the CTMC is geometrically ergodic: there exist C >= 1
+and lambda_kappa > 0 such that for all x in X and t >= 0,"
+  ||P_kappa(x,. ;t)-pi_kappa||_TV <= C e^(-lambda_kappa t).
+lambda_min=min(lambda_0,lambda_1). Infinite decaying carryover, stationary
+continuous-time real-valued state process. Other structural assumptions crucial:
+Assumption1 stochastic monotonicity of each kernel in initial state;
+Assumption2 P_0 stochastically dominated by P_1;
+Assumption4 bounded nondecreasing rewards r_kappa with r_0(x)<=r_1(x).
+Target tau=pi_1 r_1-pi_0 r_0. Design alternates deterministically at intervals l.
+Known values: above lambda/C are existence bounds for analysis, not a requirement
+of conventional DM/HW computation. OU specialization has mean-reversion theta,
+and theta*l controls effective convergence. For practical illustration theta,
+mean and noise are estimated by likelihood; do not say lambda is known.
+Authors: DM underestimates stationary effect under structural conditions; HW can
+overestimate variance in OU example; washout reduces bias at data cost. Conclusion
+p8 proposes conventional first-stage inference only when treatment is expected
+to obey these conditions, and advanced debiasing if inconclusive.
+Reviewer's assessment: conservatism is conditional, not universal across switchback
+outcome processes. Downward point-estimate bias plus inflated variance does not
+by itself establish valid two-sided GATE coverage for arbitrary carryover. Need
+distinguish stationary ATE vs transient effect. State exists in model but DM need
+not estimate full state. OU illustration relaxes general bounded reward condition.
+
+6. GLYNN, JOHARI AND RASOULI (FOUNDATION)
+Peter Glynn, Ramesh Johari, Mohammad Rasouli, "Adaptive Experimental Design with
+Temporal Interference: A Maximum Likelihood Approach". Local arXiv:2006.05591v2
+[stat.ME], 24 Dec2022, first page says Preprint Under review; original 2020 work
+(cite original publication year if bibliography metadata confirmed separately).
+Scope: BOTH adaptive design and estimation, broader than fixed-block switchback;
+temporal. Long-run stationary reward contrast alpha=alpha(2)-alpha(1), MLE
+consistency, asymptotic variance/CLTs, not primary sequential hypothesis testing.
+Read intro/related pp1-2 and conclusion pp8-9; setup pp2-3 narrow lookup.
+
+Exact structural assumptions p2: "We assume a finite state space S." and
+"We assume both P^(1) and P^(2) are irreducible." Unknown stationary transition
+matrices on common observable state. Rewards bounded, conditionally independent
+of past given state/action/next state. No fixed carryover window, no numerical
+mixing rate required by these statements. Irreducibility alone does not imply
+aperiodic total-variation convergence; do not equate this to Hu-Wager contraction.
+TAR policy condition requires limiting positive state-action sampling frequencies
+(Definition1 pp4-5). MLE estimates transitions and reward means; efficient design
+learns unknown primitives online with forced exploration.
+Authors explicitly introduction p2: one run, "without prior knowledge of any of
+the parameters of either policy or their rewards." No known m/t_mix is required.
+Full current state/state-space knowledge is needed for action selection and MLE;
+conclusion p9 acknowledges full state knowledge may be infeasible. Authors focus
+on asymptotic efficiency, leaving finite-horizon tuning as future work.
+Reviewer's assessment: an important alternative tradeoff: replace exact horizon
+knowledge with observed stationary finite-state model and enough exploration;
+should not criticize as requiring known mixing just because chain dependence exists.
+
+7. LI ET AL. (CONGESTION)
+Shuangning Li, Ramesh Johari, Xu Kuang, Stefan Wager, "Experimenting Under
+Stochastic Congestion". arXiv:2302.12093v6 [eess.SY], 12 Aug2026; title page
+August13 2026. Footnote explicitly requests citation "S. Li, R. Johari, X. Kuang
+and S. Wager" because Kuang published under another full name previously.
+Scope: BOTH analysis and alternatives in design; broader congestion interference,
+not geographical graph spillover. Temporal dynamic customer-to-customer effects.
+Estimand is local total policy gradient V'(p) of stationary throughput, not just
+finite ATE between arbitrary distant policies. CLTs, variance estimators and CIs.
+Read intro/litreview pp1-5, implications pp22-23; narrow assumptions pp6,9-10.
+
+Model: continuous-time birth-death queue, state-dependent accepted Poisson arrivals
+lambda_k(p), independent exponential service times mean1/mu, FCFS and no preemption.
+Assumption1 (Bounded queue length), p6, verbatim:
+"There exists a constant K in N_+ such that for any price p,
+K = min{k: lambda_k(p)=0}."
+Assumption3 p10: positive B0,B1,B2 with B0<=lambda_k(p)<=B1 and
+|lambda_k''(p)|<=B2 for all relevant p,k<K.
+Assumption4 (Interval length), p10, verbatim:
+"In the interval switchback experiment, the interval length l_T satisfies
+l_T/T -> 0 and l_T/sqrt(T) -> infinity as T -> infinity."
+No finite carryover cutoff: stationary finite irreducible queue has ongoing mixing;
+increasing block lengths control boundary bias rather than assume exact washout.
+Assumption2 p9: sqrt(T)*zeta_T -> infinity and sqrt(T)*zeta_T^2 ->0, ensuring
+enough price signal but small finite-difference bias. Nonstationary extension
+assumes finitely many regimes/change points (Assumption5), not arbitrary variation.
+Known values/observations: weighted direct-effect estimator uses observed queue
+length/state-specific arrival counts and times, empirical occupancy; no need to
+infer full model primitives first. Idle-time formula p8 explicitly multiplies by
+service rate mu; reviewed front matter does not settle known vs estimated mu, so
+do not claim all estimators eliminate mu. Queue capacity structural bound and
+reference price/perturbations chosen; no numerical mixing time input specified.
+Authors: weighted direct-effect estimator no worse asymptotic variance than standard
+switchback estimator under model; user-level local price randomization also works,
+avoiding fixed block precommitment. Idle-time method needs milder work-conserving
+structure. Implications explicitly acknowledge model misspecification concern.
+Reviewer's assessment: local policy-gradient design/inference, not generic global
+effect solution; structural queue model supplies information otherwise unavailable.
+
+8. SUN ET AL. (ARMA)
+Ke Sun, Linglong Kong, Hongtu Zhu, Chengchun Shi. Exact local title is
+"ARMA-Design: Optimal Treatment Allocation Strategies for A/B Testing in
+Partially Observable Experiments" (file name adds Time Series, not on title page).
+arXiv:2408.05342v4 [econ.EM], 11 Jan2025. File name2024 reflects initial version.
+Scope: BOTH; temporal only, spatial extensions discussed as future work pp36-37.
+Steady-state all+1 vs all-1 ATE; MSE-optimal allocation, estimators and inference
+discussion, not primarily randomization hypothesis testing.
+Read intro/related pp2-9 and discussion pp36-39; narrow model/assumptions pp12-17,
+design nuisance estimation p24.
+
+Controlled ARMA(p,q), equation(3.2), p12:
+  Y_t=mu+sum_{j=1}^p a_j Y_{t-j}+b U_t+sum_{j=0}^q theta_j epsilon_{t-j},
+theta_0=1; epsilon_t i.i.d. mean0 variance sigma^2 (p13).
+Assumption1 (No unit root), pp14-15, verbatim:
+"All the roots of the polynomial 1-sum_{j=1}^p a_j y^j lie outside the unit circle."
+VARMA version Assumption2 p21 puts roots of det(I-sum A_j y^j) outside circle.
+Carryover can persist infinitely through stable AR recursion; finite AR order p
+is not an exact finite carryover window. MA(q) models dependence/partial observability,
+and determines how much action-history dependence optimal observation-agnostic
+design needs. Target ATE=2b/(1-sum a_j); vector form2e'(I-A)^-1 b.
+Small-signal asymptotics pp16-17: T->infinity AND |ATE|->0 (arbitrary rate);
+not a numerical known constant, rather an approximation regime.
+Known vs learned: p24 explicitly says coefficients c_k and p,q depend on true
+model "which are typically unknown"; proposes historical estimation and AIC/BIC,
+or sequential daily updating. Thus p,q/coefficient knowledge NOT assumed given
+for practical algorithm; correctness/adequacy of fitted stable linear model remains
+a burden. Discussion p38 says optimality not guaranteed when small-signal fails;
+model-based design robust empirically under tested misspecifications, no universal
+robustness theorem should be attributed. Seasonal filtering used for stationarity.
+Reviewer's assessment: partial observability supported within linear stable model;
+does not solve arbitrary unknown latent nonlinear carryover or nonstationarity.
+
+9. WU ET AL. (TRANSFORMER RL)
+Xiangkun Wu, Qianglin Wen, Yingying Zhang, Hongtu Zhu, Ting Li, Chengchun Shi,
+"Designing Time Series Experiments in A/B Testing with Transformer Reinforcement
+Learning". ICLR2026; local arXiv:2602.01853v1 [cs.LG], 2 Feb2026.
+Scope: DESIGN ONLY in primary contribution (takes an ATE estimation procedure as
+input, though computes estimators for optimization); temporal only, multiple-unit
+spillovers explicitly future work p12 conclusion. Causal finite-horizon ATE MSE,
+not newly developed hypothesis-test/CI guarantee.
+Read intro/related pp1-6 and conclusion p12; narrow setup/design assumption pp6-8.
+
+General conditional law p6:
+P_t(Y,O|H_{t-1},O_t,A_t)=Pr(Y_t in Y,O_{t+1} in O|H_{t-1},O_t,A_t),
+where H_{t-1} is entire observed past. No exact finite carryover horizon, no required
+Markov sufficiency of current feature vector, no prescribed geometric decay.
+Theorem1 p6 states an EXISTENCE impossibility result: for DR estimator there exist
+DGPs whose unique variance-optimal allocation uses entire history. It is not a
+universal proof that every fixed-memory policy is suboptimal in every DGP.
+Actual operational assumption p7, verbatim:
+"We assume access to a simulation environment that can generate (O_t,A_t,Y_t)_t
+that approximates the experimental data generating process".
+RL reward is discounted negative squared difference from simulator Monte Carlo
+all-treatment/all-control ATE. Authors p8 propose learning simulator from accrued
+data if none initially available, updating design daily.
+Known values: no known m/t_mix/AR order, but requires credible counterfactual
+simulation/estimated environment, chosen estimator and neural/training settings.
+Observed histories used; no demand for observing latent physical full state.
+Reviewer's assessment: relaxes explicit low-dimensional carryover restrictions by
+moving burden to simulator fidelity, training data and approximation; "without
+restrictive assumptions" is an author positioning statement, not literal absence
+of requirements. DR efficiency assumes regularity and adequate nuisance learning;
+empirical design gains do not alone certify valid CIs under simulation error.
+
+10. FARIAS ET AL. (DQ)
+Vivek F. Farias, Andrew A. Li, Tianyi Peng, Andrew Zheng,
+"Markovian Interference in Experiments". arXiv:2206.02371v2 [cs.LG], 9 Jun2022.
+Scope: ANALYSIS ONLY under given simple Bernoulli randomization (explicitly
+eschews design as lever); temporal Markovian cross-customer interference, not graph
+geographical spillovers. Steady-state ATE, bias-variance, asymptotic normality;
+not an exact unbiased GATE inference solution.
+Read intro/related pp2-9 and discussion/conclusion pp21-25; narrow mixing pp11-12.
+
+Stationary MDP with unknown transition p(s,a,s'), observed state-action-reward
+trajectory; experiment pi_1/2 produces P_1/2=(P_0+P_1)/2. Assumption1 p11-12:
+"There exist constants C and lambda such that for all s in S,"
+  d_TV(P_1/2^k(s,.),rho_1/2)<=C lambda^k.
+For meaningful geometric mixing, lambda<1. This is a mixing property of the
+EXPERIMENTATION chain, distinct from uniform per-policy/time contraction in Hu.
+Theorem1 condition p12:
+  d_TV(p(s,1,.),p(s,0,.))<=delta for every state.
+DQ bias bounded C' r_max delta^2/(1-lambda)^2. Small transition perturbation is
+not identical to short memory. No exact cutoff; Markovian dependence can persist.
+Known values: C,lambda,delta bound accuracy, not stated known inputs to DQ.
+Full state observed and Q_pi1/2 must be estimated, or approximated. Authors obtain
+second-order bias, potentially exponentially smaller variance than unbiased OPE;
+asymptotic normality does not erase approximation bias in target ATE. Discussion
+considers higher-order corrections and regularization tradeoff, not proof of
+unqualified exact inference with fixed first-order estimator.
+Reviewer's assessment: useful broader foundation for model-based precision;
+should distinguish approximate policy-gradient effect from exact rollout contrast.
+
+11. SHI ET AL. (DYNAMIC CAUSAL EFFECTS)
+Chengchun Shi, Xiaoyu Wang, Shikai Luo, Hongtu Zhu, Jieping Ye, Rui Song,
+"Dynamic Causal Effects Evaluation in A/B Testing with a Reinforcement Learning
+Framework". Local arXiv:2002.01711v6 [cs.LG], 3 Nov2022; file labeled2023
+(published year may be2023, confirm independently if using journal metadata).
+Scope: ANALYSIS ONLY of a variety of given Markov, alternating, adaptive designs;
+temporal only. Explicit causal estimands plus sequential hypothesis testing for
+H0: integrated value contrast<=0 vs H1>0; variance/uncertainty theory enabling
+monitoring. Broader RL foundation rather than switchback design paper.
+Read intro/related pp2-7 and discussion pp28-32; narrow model pp9-10,
+technical geometric assumption C1 p46 only for exact copying.
+
+MA / CMIA observed-data equations(1),(2), p10:
+  Pr(S_{t+1} in B|A_t,S_t,{S_j,A_j,Y_j}_{j<t})=P(B;A_t,S_t),
+  E(Y_t|A_t,S_t,{S_j,A_j,Y_j}_{j<t})=r(A_t,S_t).
+Consistency and sequential randomization (CA,SRA) required. Time-homogeneous
+P,r and fully recorded sufficient state; past action influence must pass through
+state. Authors: "the state variables shall be chosen to include those that serve
+as important mediators between past treatments and current outcomes" (p10).
+No finite exact cutoff. Discount 0<gamma<1 in estimand weights outcomes; gamma
+is chosen preference, NOT physical carryover-decay rate.
+For asymptotic inference C1(ii) p46:
+  ||Pr(S_t in .|S_0=s)-Pi(.)||_TV<=M(s)rho^t,
+rho<1 and integral M(s)Pi(ds)<infinity; C1(i) transition density bounded away
+from0 and infinity. Alternating design uses analogous even/odd subsequence
+ergodicity (C1iii), adaptive designs additional limiting behavior-policy conditions.
+Known values: no known mixing numerical constant required in stated test; analyst
+chooses discount gamma, reference initial-state distribution G, function basis,
+alpha-spending schedule; learns value-function nuisance. Appropriate observed
+state sufficiency is substantive, not an empirical certainty.
+Estimand p8-9 V(a;s)=sum_{t>=0} gamma^t E[Y_t^*(always a)|S0=s],
+tau=integral(V(1;s)-V(0;s))G(ds). It differs from stationary average reward or
+finite-horizon GATE. Reviewer's assessment: not interchangeable effect target;
+full-state/stationarity assumptions buy sequential valid testing under studied
+regularity and allocation mechanisms.
+
+12. JOHARI, PENG AND XING (TPG)
+Ramesh Johari, Tianyi Peng, Wenqian Xing, "Estimation of Treatment Effects Under
+Nonstationarity via the Truncated Policy Gradient Estimator".
+arXiv:2506.05308v3 [stat.ME], 2 Jun2026; title page June3 2026.
+Scope: ANALYSIS ONLY under Bernoulli assignment (explicit alternative to careful
+switchback tuning); temporal dynamic interference, no geographic graph.
+Finite-horizon GATE approximation, bias-variance, CLT/HAC CIs; caveat on centering
+below. Read intro/related pp1-4 and conclusion p18; narrow assumptions pp5,13.
+
+Assumption1 (Mixing time), p5, verbatim:
+"There exists a constant gamma, 0 < gamma < 1, such that, for any time t in [T],
+any action z in Z, and any pair of distributions f and f' over the state space X,
+the following holds"
+  ||f'P_z^t-fP_z^t||_TV <= gamma||f'-f||_TV.
+Finite state, unknown nonstationary kernels, bounded reward; no exact cutoff;
+uniform geometric contraction. Only rewards/assignments used, no state knowledge
+needed for estimator. Truncation k is an estimator horizon, not assumed true last lag.
+Theorem1 p8 defines delta=sup_{t,x}||P_1^t(x,.)-P_0^t(x,.)||_TV and gives bias
+  O(((1-gamma^k)/(1-gamma)^2)*delta^2*M + (gamma^k/(1-gamma))*delta*M).
+The first term is Taylor approximation; increasing k cannot generally remove it.
+Known values: gamma/delta are analysis constants, not explicitly known estimator
+inputs. Empirical k selection heuristic post experiment, no exact unknown-tail
+certification. Advantage in bounds is especially when delta<1-gamma (p9).
+
+INFERENCE CAVEAT (p13):
+Assumption2: sigma_k^2=lim_T T^-1 Var(sum_t B_t) in (0,infinity).
+Assumption3 (Cesaro-L2 mean stability), exact equation:
+  Delta_T^2=T^-1 sum_t(mu_t-mubar_T)^2=o(T^-2/3), mu_t=E[B_t].
+Thus arbitrary nonstationarity in error bounds is restricted for feasible HAC
+inference. Theorem2 fixes finite k and states
+  sqrt(T)(hat_tau_k-E[hat_tau_k]) => N(0,sigma_k^2),
+NOT sqrt(T)(hat_tau_k-GATE). HAC consistently estimates variance under Assumptions
+1-3 and growing bandwidth O(T^1/3). Reviewer's assessment: ordinary intervals
+based on this CLT cover mean estimator target; GATE coverage additionally needs
+negligible residual bias or valid bias allowance. Authors introduction/conclusion
+describe valid inference, but review must retain exact centering caveat rather
+than claiming bias-free fixed-k inference for general GATE.
+
+CROSS-PAPER SYNTHESIS FOR REVIEW
+* Finite m, geometric contraction, stable linear recursion, and Markov sufficient
+  state are substantively different assumptions; compare separately.
+* Strong finite-m guarantee needs valid bound in actual exposure rule. An existence
+  mixing bound only becomes numerical prior knowledge when a particular tuning
+  prescription uses it; do not equate all geometric assumptions to known t_mix.
+* Glynn learns stationary finite-state primitives without known m/t_mix; Sun learns
+  orders/coefs from history; Wen estimates RL nuisances and assesses carryover/
+  autocorrelation; Wu moves restriction burden to simulator. These are different
+  learning targets, not uniformly "known carryover."
+* Whole-system temporal randomization addresses contemporaneous spatial
+  interactions by joint assignment but does not mean paper models geographic
+  spillovers. Jia explicitly jointly models graph spillover and temporal decay.
+* ATE denotes different quantities: finite-horizon global effect (Hu spectral,
+  Jia, Wen, Wu, Johari); steady-state contrast (Glynn, Blanchet, Farias, Sun);
+  discounted value contrast (Shi); derivative/local policy gradient (Li).
+* Estimation MSE, conditional asymptotic CLT, and exact sharp-null testing are
+  distinct. Johari/DQ approximation bias especially precludes silently translating
+  asymptotic normality into confidence coverage of exact GATE.

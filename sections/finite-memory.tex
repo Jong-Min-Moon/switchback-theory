@@ -1,0 +1,111 @@
+}
+
+\section{Design under finite and approximate carryover}\label{sec:finite}
+
+\subsection{Exact memory turns persistence into an exposure condition}
+
+A central distinction in switchback research concerns whether the past becomes exactly irrelevant after a finite interval or only progressively less influential. The first assumption provides an operational definition of a usable observation: an outcome after a sufficiently long uninterrupted treatment run can represent persistent treatment. The second permits more realistic long tails, but generally leaves a discrepancy between the observed local exposure and the permanent deployment counterfactual. Randomization controls assignment uncertainty in both cases; it does not itself remove this discrepancy.
+
+\citet{bojinov2023} establish the foundational finite-memory design and analysis. Their Assumption~2, ``$m$-Carryover Effects,'' begins ``There exists a fixed and given $m$'' \citep[Assumption~2, p.~3762; PDF p.~4]{bojinov2023}. The displayed restriction is
+\begin{equation}\label{eq:finite-memory-original}
+Y_t(w'_{1:t-m-1},w_{t-m:T})
+=Y_t(w''_{1:t-m-1},w_{t-m:T}),
+\qquad t=m+1,\ldots,T.
+\end{equation}
+Here the two histories share the displayed suffix and may differ arbitrarily earlier. This transcribes the source equation, retaining its indexing while simplifying typography. With nonanticipation, it implies dependence only on $w_{t-m:t}$. Importantly, $m$ is a bound on the duration of influence, rather than an assumed response coefficient: the magnitude, sign, interactions, and time variation of effects within the window remain unrestricted.
+
+The paper does both design and analysis. It minimizes worst-case estimation risk over regular switchback assignments and develops exact sharp-null randomization tests and asymptotic conservative tests and confidence intervals for a persistent-treatment contrast. The central design initially equates the analyst's specified lag $p$ with the true order $m$. Although the framework accommodates arbitrary outcome trajectories within the specified exposure model, this is not an assumption of unrestricted temporal interference.
+
+The distinction between $m$ and $p$ is crucial when interpreting robustness. If $p>m$, an uninterrupted run of length $p+1$ suffices, though precision is lost and the averaging window starts later. If $p<m$, the Horvitz--Thompson estimator is biased for the intended persistent-treatment contrast. Its asymptotic normality is then centered at its own expectation, not at that contrast \citep[Section~4.3, p.~3768]{bojinov2023}. The validity of a sharp no-effect randomization test under misspecification therefore should not be interpreted as validity of a confidence interval for the permanent deployment effect under underestimated memory.
+
+The proposed procedure for learning $m$ compares estimates from appropriately designed, independent experiments or separated epochs using different assumed orders. The authors emphasize its resource requirements: distinguishing candidate orders can require experiments on the scale $T/m>100$, and weak power can prevent rejection when $m$ is large relative to the horizon \citep[Section~6, pp.~3774--3775]{bojinov2023}. Thus, the known-order formulation is supplemented by a learning proposal, but practical identification remains demanding. Our assessment is that a finite upper bound is most defensible for bounded operational delays; it is harder to justify for customer learning, retention, or policy adaptation. A sensitivity analysis over plausible upper bounds is consequently more informative than treating one guessed order as certain.
+
+\subsection{Balancing improves precision within the exposure model}
+
+Several contributions improve the efficiency of usable exposures rather than relaxing what qualifies as one. The balanced time-series design of \citet{ni2022} fixes treatment and control totals. Its exact limited-carryover assumption is
+\begin{equation}\label{eq:balanced-one-period}
+Y_t(w_{1:T})=Y_t(w'_{1:T})
+\quad\text{whenever}\quad w_{t-1:t}=w'_{t-1:t},
+\end{equation}
+as stated in Assumption~1 \citep[p.~2]{ni2022}. This is first-order memory and nonanticipation together. The authors suggest selecting the duration of a period to cover the physical carryover interval and discuss extensions beyond first order. That choice rescales a known or plausible physical bound; it does not make the bound unnecessary. Their contribution includes design, estimator variance, and asymptotic inference, while spatial interference is addressed through prior aggregation into one unit.
+
+\citet{masoero2023} show why switching can help even when interference is absent. Joint balance over units and periods removes leading contributions from unit and time heterogeneity in their illustrative variance comparison. Their central randomization analysis assumes two potential outcomes per unit--period, with no cross-unit or temporal interference. This paper should therefore be distinguished from work formally accommodating carryover. Its suggestion to space switches beyond a known carryover duration and analyze only subsequent observations is an extension strategy, not the central theorem.
+
+\citet{missault2025} make the finite-memory extension explicit through regular balanced switchback designs. Their assignments balance both each item's treatment count and the number of treated items in each period. Assumption~4 again requires ``a fixed and given $m$'' in $\{1,\ldots,S-1\}$ and, for every item $n$ and $s\in\{m+1,\ldots,S\}$, imposes
+\begin{align}
+ &Y_{n,s}(W'_{n,1:s-m-1},W_{n,s-m:S})\notag\\
+ &\qquad=Y_{n,s}(W''_{n,1:s-m-1},W_{n,s-m:S}).
+ \label{eq:missault-finite-memory}
+\end{align}
+This transcribes the displayed source equality with simplified typography; its common suffix starts at $s-m$.\footnote{The source's preceding prose has inconsistent prefix indexing. We retain the displayed equality and its stated interpretation, rather than silently reproducing that inconsistency.} Under nonanticipation, the outcome depends on the item's current and at most $m$ preceding assignments \citep[Assumption~4, p.~6]{missault2025}. Their lagged Horvitz--Thompson analysis requires a lag that covers this order. The paper does design and analysis, including variance estimation and empirical power comparisons. However, its Assumption~1 explicitly excludes cross-item spillovers. Multiple items therefore do not imply modeled spatial interference: competitive substitution across items remains a potential violation, and clustering is suggested when needed. The conclusion identifies tuning the assumed upper bound and establishing broader design optimality as further research.
+
+The adaptive design of \citet{zeng2026} additionally uses outcomes observed during the experiment. Sequential rerandomization balances lagged outcomes and contemporaneous covariates across operational units. Its first-order extension blocks on previous assignment, producing stable groups that remain treated or remain controlled. The maintained restriction is explicitly
+\begin{equation}\label{eq:zeng-first-order}
+Y_{i,t}(w_{i,1:T})=Y_{i,t}(w'_{i,1:T})
+=Y_{i,t}(w_{i,t-1},w_{i,t})
+\end{equation}
+when the two paths agree at $t-1$ and $t$ \citep[Assumption~3(b), pp.~4--5]{zeng2026}. It permits heterogeneous first-order responses, while ruling out longer history and cross-unit spillovers. Choosing prognostic variables or rerandomization thresholds does not estimate this memory restriction. The suggestion to coarsen the time scale makes it a potentially useful approximation, with a corresponding loss in temporal resolution.
+
+The inference endpoints also differ across settings. \citet{zeng2026} provide finite-sample sharp-null randomization inference without carryover; with first-order carryover, four potential outcomes require a more elaborate sharp null, and the paper focuses on asymptotic inference \citep[Section~4.2, p.~14]{zeng2026}. Their discussion acknowledges bias from infinite-order approximations and identifies cross-unit spillovers as an extension. Balancing should consequently be understood as improving precision conditional on an exposure model, rather than validating that model.
+
+\subsection{Surrogates recover transition data through stronger structure}
+
+\citet{chen2026} combine design and analysis by measuring a surrogate $Q_{it}$ that captures the effect of past assignments on the final outcome. Importance sampling then uses observations near switches that a conventional persistent-exposure estimator would discard. This efficiency gain does not eliminate the finite-memory assumption. Assumption~1 requires a positive integer $p$ such that, for any $t>p$ and two assignment paths,
+\begin{align}
+ w_{t-p:t}=w'_{t-p:t}
+ &\ \Longrightarrow\ Y_{it}(w_{1:t})=Y_{it}(w'_{1:t}),\notag\\
+ w_{t-p:t-1}=w'_{t-p:t-1}
+ &\ \Longrightarrow\ Q_{it}(w_{1:t-1})=Q_{it}(w'_{1:t-1}).
+ \label{eq:chen-finite-carryover}
+\end{align}
+These transcribe the source restriction with simplified typography \citep[Assumption~1, p.~4857; PDF p.~4]{chen2026}. The final outcome's window contains current treatment and $p$ preceding assignments; the surrogate's window contains only the $p$ preceding assignments. The source already indexes these potential outcomes by histories through $t$ and $t-1$, respectively, consistently excluding future assignments.
+
+Their additional surrogacy condition is printed as
+\begin{equation}\label{eq:chen-surrogacy}
+Y_{it}\perp\!\!\!\perp W_{t-p:t-1}\mid(Q_{it},X_i,S_t).
+\end{equation}
+This reproduces Assumption~3's conditioning set rather than silently adding other variables \citep[p.~4858]{chen2026}. Assumption~4 further requires conditional independence of potential outcomes across time and a time-invariant conditional distribution for the surrogate, although the final outcome distribution need not be stationary. The model therefore exchanges discarded data for assumptions about measurement, historical mediation, temporal dependence, and conditional density stability.
+
+The experimenter must specify or learn both $p$ and a divergence bound $B$ governing how surrogate distributions differ across treatment histories. The paper proposes estimating densities and testing candidate lag effects in pilot data. These are useful implementation proposals, but their interpretation depends on the surrogate capturing the relevant pathways. A good predictor of the current outcome is not automatically a surrogate that blocks every historical treatment channel.
+
+The paper also distinguishes an oracle estimator using true conditional densities from its practical plug-in version. Oracle unbiasedness and the stated central limit theorem do not automatically transfer unchanged to arbitrarily estimated density ratios. General plug-in efficiency analysis is difficult; the paper supplements theory with a binary-surrogate case and numerical evidence \citep[Sections~3--5]{chen2026}. Its exact randomization procedure uses a joint sharp null involving the outcome and surrogate. Thus, its endpoints include causal estimation, confidence intervals, and testing, with different conditions for each, rather than one unconditional efficiency guarantee.
+
+\subsection{Approximate memory requires explicit control of the remaining bias}
+
+\citet{xiong2024} take a broader design perspective, decomposing error into carryover, periodicity, serially correlated outcomes, and simultaneous interventions. Their Assumption~4.2 requires, for every $t$, a carryover kernel satisfying
+\begin{align}
+ \int d_t^{\mathrm{co}}(t')f(t')\,dt'&=1,\notag\\
+ \delta_t^{\mathrm{co}}(\boldsymbol w_t)
+ &=\delta_t^{\mathrm{co}}\int w_{t'}d_t^{\mathrm{co}}(t')f(t')\,dt'.
+ \label{eq:xiong-carryover-kernel}
+\end{align}
+This reproduces the source equations with normalized typography, using $\boldsymbol w_t$ for the assignment history, $f$ for event density, and $\delta_t^{\mathrm{co}}=\delta_t^{\mathrm{co}}(\boldsymbol1_t)$ \citep[Assumption~4.2, p.~21]{xiong2024}. Nonanticipation sets the kernel to zero for $t'>t$. The authors present additive kernel structure as an expository restriction; finite support and geometric tails are examples, rather than one universally imposed window or decay rate. The design is informed by cumulative-effect curves estimated from prior experiments, together with historical outcomes. Their contribution is both design and analysis, principally through bias--variance decomposition and empirical design selection rather than a general new confidence-interval theorem.
+
+This perspective explains why longer intervals need not always improve experiments: they can reduce carryover bias while increasing variance associated with correlated outcomes and treatment allocation. Their empirical Bayes approach makes the role of prior information explicit, but its usefulness for a new policy depends on how well prior response dynamics transfer. The reported nonmonotonic cumulative-effect curves further caution against assuming that all operational effects approach their long-run value smoothly from one side \citep[Sections~1 and~6]{xiong2024}.
+
+\citet{ni2025model} retain nonanticipation while allowing arbitrary-length history. Their exact diminishing-influence restriction is
+\begin{equation}\label{eq:ni-history-envelope}
+\max_{w_{1:t-q},w'_{1:t-q}}
+\left|Y_t(w_{1:t-q},d)-Y_t(w'_{1:t-q},d)\right|
+\leq\phi_t(q),\qquad d\in\{0,1\}^{q},
+\end{equation}
+where $\phi_t(q)$ is decreasing for $q\geq1$ \citep[Assumption~2, Eq.~(8), p.~14]{ni2025model}. This transcribes the source with simplified typography. No particular geometric rate is maintained. Historical modeling instead guides the seasonal cycle, the valid-observation fraction $\rho$, and a temporal-coupling refinement. The design guarantees a predetermined count of balanced usable observations, which directly addresses the instability of random exposure counts.
+
+However, the two-period estimator generally has expectation $\bar\tau=\mathbb{E}(\widehat\tau)$ distinct from the global effect $\tau$. Theorem~5 centers its normal limit at $\mathbb{E}(\widehat\tau)$; the authors explicitly state that the bias remains fixed when this estimator does not adapt to the horizon \citep[p.~25]{ni2025model}. A decreasing influence envelope enables a bias bound, rather than making the resulting interval automatically cover $\tau$.
+
+Variance analysis introduces a further covariance identity,
+\begin{equation}\label{eq:ni-covariance-identity}
+S_{b,b'}^{1,0}+S_{b,b'}^{0,1}
+=S_{b,b'}^{1,1}+S_{b,b'}^{0,0}-S_{b,b'}^{\tau},
+\end{equation}
+reproduced from Assumption~3 \citep[pp.~18--19]{ni2025model}. The source supplies sufficient conditions, including at most one-period carryover or suitable invariance of treatment contrasts to earlier assignments. These conditions can fail with more complicated historical interactions. Proposition~1 also leaves a conditional-covariance remainder of indeterminate sign in the variance estimate. Fast decay can make it small, but an unspecified decreasing envelope alone does not establish fully conservative standard errors \citep[p.~26]{ni2025model}. Historical autoregressive calibration is therefore useful guidance, while residual global-effect bias and variance approximation remain separate inferential issues.
+
+Finally, \citet{carryover2025} treat an assumed horizon as something to challenge. Their diagnostic theory adopts the following additive finite-lag model, transcribed from Equation~(3) with typography normalized:
+\begin{equation}\label{eq:carryover-diagnostic-model}
+\begin{aligned}
+Y_{i,t}(W_{i,1:t})
+ &=\mu_i+\alpha_{i,t}+\delta^{(0)}W_{i,t}\\
+ &\quad+\delta^{(1)}W_{i,t-1}+\cdots+\delta^{(m)}W_{i,t-m}+\epsilon_{i,t}.
+\end{aligned}
+\end{equation}
+Here $m$ is the true carryover duration, whereas $\ell$ is the analyst's chosen exclusion lag; their finite-duration assumption excludes effects beyond $m$ \citep[Assumption~2, p.~2; Eq.~(3), p.~3]{carryover2025}. Under fair-coin randomization, differences between aligned estimators with consecutive assumed lags identify the omitted coefficient $-\delta^{(\ell+1)}$ when $\ell<m$. This is an analysis diagnostic, not a new assignment design or a procedure that assumes $m$ is already known. The authors explicitly state that their test cannot confirm a tight upper bound \citep[Section~3.1, p.~3]{carryover2025}. Nonrejection may reflect a weak immediate omitted lag even when more distant effects remain. Across these contributions, credible practice therefore requires recording the chosen physical horizon or decay restriction, distinguishing learned tuning from maintained assumptions, and reporting how conclusions change when that restriction is relaxed.

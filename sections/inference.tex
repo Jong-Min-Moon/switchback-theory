@@ -1,0 +1,135 @@
+\section{Inferential targets, diagnostics, and practical precision}\label{sec:inference}
+
+\subsection{Dynamic effects need not be sustained-policy effects}
+
+An experiment can identify a useful dynamic contrast without identifying the effect of permanently treating the system. \citet{bojinovshephard2019} define time-averaged, lagged causal effects that condition on realized earlier history and average over selected subsequent assignments. Their main framework allows arbitrary dependence on past treatments. The panel generalization of \citet{bojinovpanel2021} retains this flexibility and averages across units and time. A chosen contrast lag therefore need not be an asserted upper bound on causal persistence. These results should not be interpreted as unrestricted identification of the always-treatment versus always-control contrast from a short experiment.
+
+Two distinct forms of non-anticipation matter. An outcome restriction says future treatments cannot affect current potential outcomes. A randomization restriction says assignment cannot depend on unobserved or future potential outcomes. In the local version of \citet[Assumption~2, p.~6]{bojinovshephard2019}, the latter is
+\begin{align}
+ &\Pr(W_t=w_t\mid W_{1:t-1}=w_{1:t-1},Y_{1:T}(\bullet))\notag\\
+ &\qquad=\Pr(W_t=w_t\mid W_{1:t-1}=w_{1:t-1},
+ Y_{1:t-1}(w_{1:t-1})).\label{eq:assignment-nonanticipation}
+\end{align}
+This permits assignment based on observed history. It is different from requiring independently randomized treatments. Their outcome notation already restricts potential outcomes to current and past assignments. Their optional ``$m$-period causal impact'' restriction appears separately in Appendix~B.2; it is not necessary for every estimand or inferential result in that framework.
+
+The panel model indexes outcomes by each unit's own treatment path and thus excludes interference between units, while permitting arbitrary within-unit temporal dependence \citep[Definition~1 and Assumption~1, p.~5]{bojinovpanel2021}. It provides exact randomization tests for sharp nulls and conservative asymptotic inference for average effects. It also shows why ordinary fixed-effects regressions can fail to recover contemporaneous causal effects when carryover combines with persistent assignment. Neither repeated measurement nor unit fixed effects alone resolve this problem.
+
+\subsection{Partially sharp nulls and what diagnostics establish}
+
+\citet{liuzhong2026} study inference for a total-effect null rather than assuming every treatment history has the same outcome. Their temporal restrictions are explicitly separate. Reproducing their mathematical statements, Assumption~2.1 requires
+\[
+ Y_t(w)=Y_t(w')\quad\text{whenever }w_{1:t}=w'_{1:t},
+\]
+whereas Assumption~2.2 fixes $m\in\{0,\ldots,T-1\}$ and requires, for $t\geq m+1$,
+\[
+ Y_t(w)=Y_t(w')\quad\text{whenever }w_{t-m:T}=w'_{t-m:T}.
+\]
+Both statements quantify over all treatment paths \citep[p.~6]{liuzhong2026}. The second holds future assignments fixed and therefore does not itself exclude anticipation. Together, they imply dependence only on $w_{t-m:t}$.
+
+With $Y_t^{[m]}$ denoting the resulting local potential outcome, their null is
+\[
+ H_0^{\mathrm{tot}}(m):\quad
+ Y_t^{[m]}(1_{m+1})=Y_t^{[m]}(0_{m+1}),
+ \qquad t=m+1,\ldots,T.
+\]
+This is a period-specific, \emph{partially sharp} null: it equates the two constant histories but leaves outcomes under mixed histories unrestricted. Consequently, holding observed outcomes fixed while rerandomizing the entire assignment path is generally unjustified. Their conditional randomization test instead pools predetermined blocks into sections, retains sections that happened to be entirely treated or entirely controlled, and excludes the first $m$ periods. The null then imputes the counterfactuals needed for the restricted randomization distribution \citep[Sections~2--3]{liuzhong2026}.
+
+Finite-sample validity requires a correctly specified, prespecified upper bound $m$. Longer exclusions and larger sections can protect against carryover while reducing the informative randomized comparisons and worsening attainable $p$-values. Tests of average-effect weak nulls allow effects of opposite signs to cancel; they do not impute missing outcomes. The paper instead establishes asymptotic validity through studentization under additional regularity, equal-length blocks, $m<L$, and an analysis without assignment-dependent selection.
+
+The carryover diagnostic tests proposed horizons while maintaining outcome non-anticipation. Sequentially testing nested horizons from shortest to longest controls erroneous rejection of valid horizons. Its inferential direction is crucial: rejected horizons supply a lower confidence bound on persistence. The source states, ``The first nonrejected value determines where the procedure stops; it should not be interpreted as an estimate of the carryover horizon'' \citep[Section~4.1, p.~14]{liuzhong2026}. Nonrejection does not certify a sufficiently long washout, and the paper does not justify selecting a horizon and testing the total effect with the same outcomes. Anticipation receives a separate pairwise randomization diagnostic. These are analysis tools with design implications, rather than a replacement for scientific knowledge of plausible persistence.
+
+\subsection{Inference with decaying rather than truncated effects}
+
+\citet{linding2025} justify regression-based estimation of lagged effects and conservative heteroskedasticity-and-autocorrelation-consistent (HAC) standard errors under a misspecified working regression. Their main assignment assumption is independent $Z_t$ with known probabilities $p_t$, bounded away from zero and one. Their outcome no-anticipation assumption still allows dependence on all previous assignments.
+
+Their Assumption~3.2 defines the following expected absolute coupling discrepancy, reproduced in source notation:
+\begin{align}
+ \theta_{T,k}=\max_{k<t\leq T}\mathbb{E}\big[\big|
+ &Y_t(Z_{t:t-k+1},Z_{t-k:1})\notag\\[-2pt]
+ &-Y_t(Z_{t:t-k+1},Z'_{t-k:1})\big|\big],
+\end{align}
+where $Z'_{t-k:1}$ is an independent copy of the older assignment history. Its two conditions are
+\[
+ T^{-1}\sum_{k=1}^T\theta_{T,k}\longrightarrow0,
+ \qquad
+ \theta_{T,k}=O(k^{-1-\delta})\quad\text{for some }\delta>0.
+\]
+The weaker condition supports consistency, with additional restrictions if the regression dimension grows; the polynomial decay condition supports asymptotic normality \citep[Assumption~3.2, pp.~8--9]{linding2025}. This is a causal-history coupling restriction, not a claim that observed autocorrelation alone measures carryover.
+
+An alternative is their Assumption~3.3:
+\[
+ Y_t(Z_{t:1})=Y_t(Z_{t:t-m}),\qquad m<t\leq T,
+ \qquad m/T\to0,\quad m^4/T\to0.
+\]
+Here $m=m(T)$ can grow. The two rates serve different consistency and normality results. The displayed window contains current treatment and $m$ prior assignments. Regression lag count $K$ is a selected target dimension, not necessarily the true cutoff. A numerical decay exponent is not an input to ordinary least squares, but the decay property remains a maintained assumption. HAC bandwidth $L$ must grow suitably: under their finite-memory regime the variance result includes $Km^2/L\to0$ and $K^4L^2/T\to0$ \citep[Theorem~3.3, p.~13]{linding2025}. Unknown dependence can therefore make bandwidth choice consequential even when $m$ is not supplied directly to the estimator.
+
+These lagged effects are independent of the realized history, but generally depend on the assignment probabilities used to average over other histories. Design invariance holds in special additive models \citep[Remark~2.1, p.~8]{linding2025}. Working-model robustness should not be expanded into robustness to arbitrary assignment dependence or arbitrarily persistent causal effects.
+
+\citet{liangrecht2025} instead impose linear time-invariant dynamics. Their structural model is
+\[
+ y_t=\sum_{s=0}^t x_sg_{t-s}+e_t,
+\]
+with independently randomized binary inputs and a baseline sequence $e_t$ oblivious to randomization. Additivity and an invariant impulse response $g$ replace unrestricted history dependence. Persistent effects are permitted; geometric decay is a sufficient regularity condition rather than an exact finite cutoff. Their actual Assumption~1 concerns both $g$ and the target weights $q$. Writing $\circledast$ for the source's circular convolution notation, it requires
+\begin{align}
+ &\big\lVert(|g|\circledast|q|)\circledast(|g|\circledast|q|)\big\rVert_2^2\notag\\
+ &\quad\leq CT^{1-\epsilon}\Big(\lVert g\circledast q\rVert_2^2
+   +\langle g\circledast g,q\circledast q\rangle
+   -2\langle q,g\rangle^2\Big)^2,
+ \label{eq:liangrecht-normality}
+\end{align}
+for universal constants $C>1$ and $\epsilon>0$ \citep[Assumption~1, p.~15]{liangrecht2025}. This transcribes the source inequality with normalized convolution typography. It controls the quadratic term's asymptotic normality; summability alone does not replace this condition. Exponential decay $|g_t|\lesssim\rho^t$, $0<\rho<1$, together with nondegenerate variance and suitably limited target support, is a sufficient route to this condition. Separately, the uniform response-estimation result assumes $\lVert g\rVert_1\leq C$ and $|e_t|\leq M$ for fixed constants \citep[Theorem~3, p.~17]{liangrecht2025}; those bounds are not Assumption~1.
+
+The decay coefficient need not be numerically known to form the moment estimator. Nevertheless, choosing a truncated cumulative target and controlling its omitted tail are different tasks. The presented confidence-interval construction uses targets supported on $K=O(\log T)$ entries. Unknown slow decay threatens approximation to a full policy effect. Moreover, a finite-horizon always-treatment contrast includes boundary weights $(T-t)/T$ on $g_t$; it is not automatically an unweighted truncated sum. Linear-response structure, stable effects, and target complexity remain substantive limitations.
+
+This distinction also clarifies what ``known persistence'' means. For instance, an assumed envelope $|g_t|\leq C\rho^t$ implies the elementary bound $\sum_{t>K}|g_t|\leq C\rho^{K+1}/(1-\rho)$. This implication is a review calculation, rather than an additional result claimed by the cited paper. Knowing only that some $\rho<1$ exists does not numerically bound a finite experiment's omitted tail. A quantitative approximation guarantee needs a defensible envelope or a sensitivity analysis over plausible envelopes. Neither a visually small sample autocorrelation nor a nonsignificant lag coefficient supplies that counterfactual bound.
+
+\subsection{Model order and sequence support determine feasible inference}
+
+\citet{guoliang2026} emphasize design optimization for cumulative or lag-specific effects under a finite-order impulse-response model. Their source specification is
+\[
+ Y_t=\alpha+\sum_{k=1}^K\beta_kZ_{t-k+1}+\epsilon_t,
+ \qquad \epsilon_t\stackrel{\mathrm{iid}}{\sim}N(0,\sigma^2),
+\]
+with errors independent of assignments and $K$ fixed as $T$ grows \citep[Equation~(3.1), pp.~6--7]{guoliang2026}. Equivalently,
+\[
+ Y_t(z_1,\ldots,z_T)=Y_t(z_{t-K+1},\ldots,z_t).
+\]
+Thus $K$ includes current treatment and allows $K-1$ lagged periods. Design optimization must specify this order; the paper does not provide automatic recovery of an unknown causal cutoff. Their Markov assignment framework compares random-switch and cycle-switch classes. Preferred persistence depends on the target, so optimality is conditional on the model and candidate class. Simulated misspecification performance does not remove the finite-order, additive structure from the optimality results.
+
+Crossover analysis makes the identification role of sequence support especially clear. \citet[Assumption~2, p.~6]{jiangding2025} impose, when scientifically appropriate,
+\[
+ Y_{it}(\vec z)=Y_{it}(\vec z')
+ \quad\text{if}\quad
+ \vec z_{[t-k+1,t]}=\vec z'_{[t-k+1,t]}.
+\]
+Their $k=1$ means no lagged carryover; it corresponds to $m=0$ in the preceding finite-memory notation. No anticipation is separate, and time-invariance of treatment-sequence effects is another restriction. With all four two-period sequences, instantaneous and carryover contrasts can be identified without imposing no carryover; with only $AB$ and $BA$, unrestricted second-period direct and carryover effects are aliased. The assumed order can therefore determine identification, rather than merely improve precision. Restricted weighted least squares and conservative design-based variance estimates tolerate working-model misspecification, while the encoded causal restrictions remain essential.
+
+The source motivates finite memory through short-acting interventions and sufficiently spaced periods, while warning that learning, delayed responses, and cumulative biological or behavioral effects can persist. These are reasons to justify restrictions from the intervention and observation clock, rather than from regression convenience. Likewise, concealed assignments can support no anticipation, whereas predictable or announced future prices can undermine it. Restricting an outcome model for efficient estimation and excluding possible causal histories for identification are materially different commitments.
+
+The broader habituation designs of \citet{basse2023} also show why finite memory need not be universal. Their main pulse/wedge allocation designs allow indefinite persistence and exclude interference across units. Only the optional recycling extension requires
+\[
+ Y_{it}(e_{t'})=Y_{it}(0)\quad\text{for }0<t'\leq t-k,
+\]
+where $e_{t'}$ is a single treatment pulse \citep[Assumption~3, p.~15]{basse2023}. This is a pulse-specific restriction, rather than equality for every pair of histories sharing a recent window. A justified $k$ permits recycling previously exposed units as controls; uncertainty about $k$ threatens that efficiency gain without invalidating every baseline habituation contrast.
+
+\subsection{Spatial exposure restrictions and practical precision}
+
+\citet{nipanel2024} explicitly handle both spatial and temporal interference through balanced temporal assignment and randomized spatial clustering. Their local working paper restricts spillovers to a known neighborhood $\mathcal N(i)$ on a two-dimensional lattice. Using source notation with $\mathcal N(i)$ for the neighborhood, Assumptions~1--2 require
+\begin{align*}
+ Y_{it}(w)&=Y_{it}(w')
+ &&\text{if }w_{\mathcal N(i),1:T}=w'_{\mathcal N(i),1:T},\\
+ Y_{it}(w)&=Y_{it}(w')
+ &&\text{if }w_{1:N,t-1:t}=w'_{1:N,t-1:t}.
+\end{align*}
+The second equality restricts dependence to current and previous periods and also excludes anticipation \citep[p.~8]{nipanel2024}. Choosing a period long enough to encompass physical persistence relies on an external upper bound; changing the clock does not prove that a tail vanishes. Domain knowledge must likewise justify spatial neighborhood coverage. Their design and confidence-interval guarantees concern these exposure restrictions; broader-network simulations provide sensitivity evidence rather than replacing them.
+
+Practical precision studies address another question. \citet{ferrari2026} compare daily and weekly switching in airline ancillary pricing using a common contemporaneous-effect fixed-effects model. They explicitly omit a causal carryover mechanism from their generator and identify this as a limitation. Their calibrated serial correlation is outcome dependence, not proof of a washout horizon. Reported precision gains are consequently context specific.
+
+\citet{pankratev2026power} derive an asymptotic power approximation under a contemporaneous treatment model with cluster, time, cluster-time, and individual noise components. Cluster-size imbalance amplifies macro-shock variance, so adding observations within existing cells cannot substitute for independent assignment information. The model does not establish inference robust to treatment-induced persistence or cross-cluster spillovers.
+
+\citet{pankratev2026variance} compare adjustment methods by simulation, including both carryover and spatial contamination. Their carryover generator is explicitly
+\[
+ C_{jh}=\rho_C\tau_j\sum_{k=1}^{3}w_k(T_{j,h-k}-T_{jh}),
+ \qquad w=(0.3,0.2,0.1),
+\]
+rather than an identified three-period persistence bound in field data \citep[Equation~(3), p.~6]{pankratev2026variance}. Adjustment improves precision in favorable regimes but cannot repair interference bias; sufficiently precise intervals can support wrong-sign decisions when contamination dominates. Results depend on the selected generator, covariate information, and cluster count. These studies motivate power calibration and sensitivity analysis while reinforcing the distinction between estimating an effect precisely and identifying the intended effect.

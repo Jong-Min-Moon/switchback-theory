@@ -1,0 +1,284 @@
+SWITCHBACK REVIEW: INFERENCE AND BROADER TEMPORAL FOUNDATIONS
+=========================================================
+
+Scope and method
+----------------
+Read the introduction, related-work/literature review, and conclusion/discussion of the 12 assigned PDFs. Per orders/literature_review_rule, only narrow lookups of assumptions, definitions, or equations in setup/theory sections were made; no proofs were examined. All claims below refer to the local PDF versions, not whatever the newest external version might contain. Printed page numbers are used unless explicitly called PDF page. The extracted text is in the same directory; Lin-Ding p8 was also visually inspected to verify the absolute value in its coupling definition, which pdftotext drops.
+
+Overall synthesis
+-----------------
+1. Distinguish causal history restrictions, assignment restrictions, and outcome-noise dependence. No anticipation of outcomes is different from sequential ignorability/non-anticipating treatment assignment. Serially correlated shocks are different from causal carryover. A long within-cluster series is not many independent treatment assignments.
+2. An unknown sharp cutoff does not always destroy identification. Bojinov-Shephard and the panel extension define short-horizon/history-conditional effects allowing arbitrary past dependence. It DOES obstruct identifying those effects with a sustained-policy/global effect. Long-run policy effects require additional finite-memory, decay/mixing, structural-model, or exposure assumptions.
+3. Lin-Ding and Liang-Recht avoid a hard finite cutoff, but replace it with decay, structural, and asymptotic conditions. Do not equate 'no numerical decay rate plugged into an estimator' with 'no assumption about persistence.'
+4. Liu-Zhong's diagnostic tests can rule out short horizons; nonrejection cannot certify a sufficiently long washout. They explicitly reject interpreting the first nonrejected horizon as a horizon estimate and do not justify selecting m and testing the total effect on the same outcomes.
+5. Ferrari-Ortiz and Pankratev's power paper concern precision in contemporaneous-effect models. They do not establish carryover-robust identification. Pankratev's variance-reduction paper studies sensitivity to interference by simulation; more precise adjustment cannot remove identification bias.
+6. Some folder/file years are publication labels rather than the local version's year. Especially BS2019 is a 2017 arXiv version; Basse2023 is a 2020 version; Liang-Recht2025 is a September2024 version; Jiang-Ding2025 is actually v3 August2026. Ni panel is HBS WP24-058 (2024) rather than the inaccessible 2026 expanded title.
+
+1. Liu and Zhong (2026)
+----------------------
+File: literature/switchback/Liu and Zhong - 2026 - Randomization Tests in Switchback Experiments.pdf
+Authors: Jizhou Liu; Liang Zhong.
+Title: Randomization Tests in Switchback Experiments.
+Local version: arXiv:2602.23257v2 [stat.ME], 29 Sep 2026; title-page date September 20, 2026.
+Type: Analysis/inference primarily, with design/power implications rather than a new allocation algorithm. Temporal interference within one unit; not a spatial-spillover model. Main object is testing (finite-sample total-effect null, diagnostics, asymptotic weak-null tests); average-effect estimators and conservative variance are used for weak-null inference.
+Read: pp2-4 introduction/related literature; p32 conclusion. Narrow lookups: pp6-7 assumptions/null; pp12-14 diagnostics.
+
+Assumption 2.1 (Non-anticipation), p6, copied mathematically:
+  For any t and any two assignment sequences w,w' in {0,1}^T,
+  Y_t(w)=Y_t(w') whenever w_{1:t}=w'_{1:t}.
+Assumption 2.2 (No carryover beyond m periods), p6:
+  Fix m in {0,...,T-1}. For every t>=m+1 and any two assignment sequences w,w' in {0,1}^T,
+  Y_t(w)=Y_t(w') whenever w_{t-m:T}=w'_{t-m:T}.
+The second equality alone does NOT rule out anticipation: it fixes current AND future treatments as well as the recent m past periods. Combining Assumptions2.1+2.2 gives dependence only on w_{t-m:t}. A review that copies only Assumption2.2 and calls it no anticipation plus finite memory would lose this logical distinction.
+
+Known/chosen parameter: m must be prespecified for the primary total-effect test and be at least the true carryover horizon. Blocks and sections are also predetermined. Correctness is a causal restriction, not something guaranteed by choosing a large administrative block. More exclusion/pooling reduces usable independent comparisons and attainable p-value resolution. Assumption5.1 weak-null asymptotics fixes L and m<L while number J of blocks diverges; block selection cannot depend on assignments in this weak-null result.
+
+Null, Eq(3), p7:
+  H_0^{tot}(m): Y_t^{[m]}(1_{m+1})=Y_t^{[m]}(0_{m+1}) for all t=m+1,...,T.
+This is period-by-period but PARTIALLY sharp: it says nothing about mixed treatment histories, so a full-path Fisher permutation holding all outcomes fixed is not generally valid for it. CRT retains predetermined sections that happened to be constant treatment/control and drops their first m periods, making relevant counterfactuals imputable. Finite-sample validity is for this restricted total-effect null under correct assumptions. Weak nulls allow period effects to cancel; studentization gives asymptotic rather than finite-sample validity.
+
+Diagnostics, pp12-14: fixed-m carryover CRT maintains nonanticipation and tests no effects from assignments more than m periods earlier. Sequential nested testing in ascending m stops at first nonrejection and controls FWER on falsely rejecting valid horizons. Quoted central caution p14: 'The first nonrejected value determines where the procedure stops; it should not be interpreted as an estimate of the carryover horizon.' Rejected horizons provide a lower confidence bound. p14: validity of a total-effect test after selecting m from the same outcomes is not established. Anticipation is separately tested with pairwise imputation-based randomization inference.
+
+Realism/limitations: unknowable exact zero tail in learning/inventory systems; tests have weak power for distant/delayed effects; few retained sections limit p-values; testing assumptions is not proving them. Independent pilot evidence or scientifically defensible upper bounds remain important.
+
+2. Ferrari-Ortiz et al. (2026)
+-----------------------------
+File: literature/switchback/Ferrari-Ortiz et al. - 2026 - Cluster-Level Experiments using Temporal Switchback Designs Precision Gains in Pricing A-B Tests at LATAM Airlines.pdf
+Authors: Nicolas Ferrari-Ortiz; Sebastian Orellana-Montini; Timur Abbiasov; Marie Garkavenko; Rutger Lit (preserve accents in bibliography where possible).
+Title: Cluster-Level Experiments using Temporal Switchback Designs: Precision Gains in Pricing A/B Tests at LATAM Airlines.
+Local version: arXiv:2603.04252v1 [stat.AP], 4 Mar 2026.
+Type: Both (applied comparison of fixed vs daily/weekly design cadences, with a common TWFE analysis). Cluster/panel context, but does NOT model geographic spillovers or causal carryover; studies temporal outcome autocorrelation, calendar effects, common shocks. Estimation, confidence intervals, power/false-positive rates, not a new exact testing theory.
+Read: introductory pp1-2, related-work p2, discussion/conclusion PDFp8. Narrow lookups: pp2-3 common model, PDFp5 generator.
+
+No numbered finite-carryover/decay assumption is imposed because their model excludes causal temporal interference. Eq(1) p2 and Eq(2) p3:
+  Y_it = beta D_it + Gamma_i + Theta_t + epsilon_it.
+Here beta is the average contemporaneous effect, Gamma_i unit fixed effects, Theta_t common time effects, epsilon may be serially dependent. This is NOT a model that estimates a sustained total effect under unknown carryover. Their generator uses calibrated within-leg AR(1) residuals, but an AR(1) disturbance correlation is not geometric causal decay.
+
+Exact modeling choice, p5: 'Consequently, we do not include an explicit carryover mechanism in the data-generating process.' Justification: seat ancillary prices appear late in checkout, and cross-day induced demand shifts are expected to be immaterial. Discussion pp7: explicitly calls absence of temporal interference a key limitation; delayed shopping or shared capacity/inventory can change both estimand and cadence.
+
+Known/chosen parameters: daily vs weekly periods and randomization coordination are operational choices; residual autocorrelation is calibrated from historical data. No known finite lag m is claimed. Plausibility of negligible cross-day treatment persistence is substantive and context specific. They report up to 67% SE reduction, but do not extrapolate that improvement to systems with carryover. Their TWFE discussion correctly notes fully synchronized cluster switching is absorbed by time fixed effects; heterogeneous timing is necessary for identifying variation. Fixed-assignment comparison includes pre-period outcomes so unit-FE identification is not magically present without within-unit changes.
+
+3. Pankratev (2026a), Powerful Switchback Experiments
+--------------------------------------------------
+File: literature/switchback/Pankratev - 2026 - Powerful Switchback Experiments Or Not.pdf
+Author: Sergei Pankratev (DoorDash).
+Title: Powerful Switchback Experiments--Or Not? (source typography uses en dash).
+Local version: arXiv:2606.03012v1 [stat.ME], 2 Jun 2026.
+Type: Both in the sense of analysis/power budgeting and design implications (stratification, estimator aggregation); principally a variance approximation. Multi-cluster temporal randomization, but NO causal carryover or geographic spillover in its main outcome model. Estimation variance/power, not interference-robust confidence intervals or exact tests.
+Read: pp1-3 intro/related literature; p11 conclusion. Narrow lookup: p4 model.
+
+Eq(1), p4:
+  Y_{i,j,h}(W)=mu+tau W_{j,h}+alpha_j+gamma_h+delta_{j,h}+epsilon_{i,j,h}.
+Four error components are mutually independent, mean zero: iid cluster effects alpha, iid time effects gamma, iid cluster-time interactions delta, iid residual epsilon. Cluster sizes may be imbalanced; cell assignment randomizes treatment. There is no treatment-history argument beyond contemporaneous W_jh. This is a no-carryover/no-spillover structural specification, not a finite-memory result with unknown m. Macro-level shocks are dependence across observations, not interference from other assignments.
+
+Main result Eq(2), p4: individual-weighted OLS variance approximation has residual contribution diminishing with cell density and macro-shock contribution multiplied by a cell-size imbalance factor involving (1+cv^2). Conclusions say more observations within a cell cannot remove the macro-shock precision floor; more independent randomized cells, balance, and macro-shock prediction can help. Need not reproduce its exact formula in review because approximations/finite-sample boundary cautions complicate it.
+
+Known/chosen: J,H,density,cell-size cv and variance shares are inputs to power budgeting. Variance shares require pilot/historical calibration. No carryover horizon estimated or diagnosed. Critical limitations: Delta approximation, small JH/high imbalance boundary, assumed variance independence from cell size, and highly stylized noise. Treat strong 'exact' language in abstract cautiously; paper itself labels result an asymptotic approximation.
+
+4. Pankratev (2026b), Design-Aware Variance Reduction
+-------------------------------------------------
+File: literature/switchback/Pankratev - 2026 - Design-Aware Variance Reduction for Switchback Experiments A Comparative Study.pdf
+Author: Sergei Pankratev.
+Title: Design-Aware Variance Reduction for Switchback Experiments: A Comparative Study.
+Local version: arXiv:2606.27662v2 [stat.ME], 20 Aug 2026 (not v1 June).
+Type: Analysis/comparative simulation; no new assignment-design optimization. Both temporal and spatial interference are simulated. Estimator bias, confidence interval coverage, false positives/power/MDE/wrong-sign rejection; baseline OLS vs CUPED/CUPAC/DML doubly robust methods. The comparison is NOT a proof of identification under interference.
+Read: pp1-5 intro/related literature, pp18-19 discussion/conclusion. Narrow lookup: pp6-7 generator Eqs2-4 and pp15-17 interference interpretation.
+
+Carryover generator, Eq(3), p6, copied:
+  C_{jh}=sum_{k=1}^3 w_k rho_C tau_j(T_{j,h-k}-T_{jh}), w=(0.3,0.2,0.1).
+Observed outcomes Eq(2):
+  Y_{ijh}=Y_{ijh}(0)+tau_j T_{jh}+C_{jh}+S_{jh}.
+Assignments T_jh iid Bernoulli(.5). Temporal carryover is exactly three periods in the SIMULATION; it is not a proposed estimator's required known m. AR(1) cluster-hour noise with rho is distinct from causal carryover coefficient rho_C. Spillover Eq(4), p7:
+  S_{jh}=rho_S(1-T_{jh})[tau_{k1}T_{k1,h}+(1/2)tau_{k2}T_{k2,h}],
+where k1,k2 are nearest neighbors in a latent cluster-effect metric. It contaminates only control cells, and is a stylized contemporaneous spatial mechanism.
+
+Known/chosen: analyst sets rho_C,rho_S,three-lag vector w,neighbor definition in simulation; none are identified from observed applications. Covariates are treatment-unaffected proxies for untreated outcome and do not absorb interference. Efficiency claims depend on predictive information assigned to methods and clustering/cross-fitting. Few clusters cause undercoverage for all methods. Doubly robust adjustment with estimated propensity can overfit when clusters few; known randomized propensity is another practical choice, so the reported ranking is not universal.
+
+Important internal cautions: Under Eq3, sum w=.6 and iid assignment, marginal direct contrast is (1-.6rho_C)tau, so a sign change occurs at rho_C>5/3, although text loosely says rho_C>1. Avoid copying that threshold. Abstract/introduction suggests analogous spatial wrong-sign reversals, but pp16-17 explicitly state no sign flip occurred over rho_S<=.5. Use narrower supported conclusion: interference produces bias; narrower intervals can strengthen false conclusions when bias dominates. Precision improvement does not establish robustness. No anticipation in generator follows by construction (uses current/past treatments, not future); no numbered general assumption.
+
+5. Lin and Ding (2025)
+---------------------
+File: literature/related/Lin and Ding - 2025 - Unifying Regression-Based and Design-Based Causal Inference in Time-Series Experiments.pdf
+Authors: Zhexiao Lin; Peng Ding.
+Title: Unifying regression-based and design-based causal inference in time-series experiments.
+Local version: arXiv:2510.22864v1 [stat.ME], 26 Oct 2025; title-page date October 28, 2025.
+Type: Analysis only (fixed independent assignment probabilities), temporal effects only. Lag-specific estimands, OLS consistency/asymptotic normality, conservative HAC variance and joint weak-null tests; no spatial interference covered by main results. Extending to panel spillovers/adaptive assignment is discussion/future work.
+Read: pp1-3 introduction/related comparison; pp23-24 discussion. Narrow lookups: pp3-5 setup/estimands, pp8-10 dependence, p13 HAC conditions.
+
+Assumption2.1, p3: Y_t(z_T,...,z_{t+1},z_t,...,z_1)=Y_t(z_t,...,z_1), for all t=1,...,T. No anticipation; future treatment predictability can violate it. Assumption2.2, p4: Z_1,...,Z_T independent, p_t=P(Z_t=1) in (0,1), probabilities known by design. Ass3.1 keeps probabilities bounded away from 0/1.
+
+Exact temporal assumptions (VISUALLY VERIFIED ABSOLUTE VALUE):
+Assumption3.2 (decaying carryover effects condition), pp8-9:
+  theta_{T,k}=max_{k<t<=T} E[ |Y_t(Z_{t:t-k+1},Z_{t-k:1}) - Y_t(Z_{t:t-k+1},Z'_{t-k:1})| ],
+where Z'_{t-k:1} is an independent identically distributed copy of past treatment history. Assume
+  (i) (1/T) sum_{k=1}^T theta_{T,k} -> 0;
+  (ii) theta_{T,k}=O(k^{-1-delta}) for some delta>0.
+(i) contributes to consistency, (ii) to asymptotic normality; Theorem3.1 also imposes K sum theta/T ->0 when K diverges.
+Alternative Assumption3.3 (m-dependence condition), p9:
+  There exists some m=m(T) such that Y_t=Y_t(Z_{t:1})=Y_t(Z_{t:t-m}) for all m<t<=T with
+  (i) m/T ->0; (ii) m^4/T ->0.
+Note indexing: the displayed window Z_{t:t-m} contains current plus m past assignments even though prose says 'most recent m treatments'. Copy equation and avoid off-by-one prose.
+
+Known/chosen: estimation chooses K lags and uses known assignment p_t; K is target/regression dimension, not necessarily a true carryover cutoff. Under polynomial-coupling regime the numerical delta need not be supplied to OLS; it is a maintained asymptotic property. HAC chooses bandwidth L. Theorem3.3 p13 under m-dependence requires Km^2/L ->0, K^4 L^2/T ->0, K^4/T ->0 as well as m^4/T ->0; selecting L needs to capture dependence asymptotically even if m itself is not input. Under decaying regime K fixed and L->infinity, K^4L^2/T->0. Extra boundedness/nondegeneracy assumptions apply. This is much weaker than requiring an exactly known hard cutoff, but not automatic finite-sample validity for arbitrarily slow decay.
+
+Estimand nuance: initial introductory contrast says effects independent of realized treatment path. Remark2.1 p8 explicitly states their lag effect generally DEPENDS on assignment probabilities, since it averages over remaining histories; design-invariance holds in special additive linear models. OLS working-model misspecification allowed, but causal no-anticipation, independent assignment, and weak-dependence assumptions remain required. HAC is conservative in general, consistent under constant assignment probabilities and time-homogeneous effects.
+
+6. Liang and Recht (published2025; local2024 version)
+--------------------------------------------------
+File: literature/related/Liang and Recht - 2025 - Randomization Inference When N Equals One.pdf
+Authors: Tengyuan Liang; Benjamin Recht.
+Title: Randomization Inference When N Equals One.
+Local version: arXiv:2310.16989v2 [stat.ME], 19 Sep 2024. Published as Biometrika2025 in prior references; main review should explicitly mark the local v2, not silently quote a final journal version.
+Type: Analysis framework under iid Bernoulli treatment, with design motivation/future questions rather than optimized allocation. Temporal dynamic interference only (the word spillover sometimes means temporal persistence, not geographic spillover). Method-of-moments/generalized Horvitz-Thompson estimators, variance formulas, asymptotic normality and confidence intervals.
+Read: pp1-5 intro/foundations; pp11-12 related methodological comparison; pp21-22 discussion. Narrow lookups: pp6-8 model/estimands; p15 Ass1; pp17-18 CI construction.
+
+Main structural model Eq(1.2), p4 / Eq(2.2), p6:
+  y_t=sum_{s=0}^t x_s g_{t-s}+e_t.
+This is LINEAR TIME-INVARIANT additive dynamic response. x_t iid Bernoulli(.5); g and e deterministic relative to treatment randomization; e may be nonstationary/systematic but oblivious to the assignment. It allows an infinite/persistent response as horizon grows, no hard cutoff by default; no anticipation is built into causal convolution, not a separate numbered axiom. Time invariance and additivity are strong structural restrictions even when noise is unrestricted.
+
+Assumption1, p15, mathematical transcription (circular convolution \circledast in theorem section):
+  || (|g| circledast |q|) circledast (|g| circledast |q|) ||_2^2
+  <= C T^{1-epsilon} ( ||g circledast q||_2^2 + <g circledast g,q circledast q> - 2<q,g>^2 )^2,
+  for universal C>1, epsilon>0.
+This controls quadratic-term asymptotic normality. Geometric response decay |g_t| lesssim rho^t, 0<rho<1, plus nondegenerate variance and polylogarithmically supported q is a SUFFICIENT condition, not Ass1 itself. Source p15 stresses normality does not hold for arbitrary g and q.
+
+Known/chosen: q defines desired impulse-response functional; finite supported q or truncation K=O(log T) in presented confidence interval construction. rho need not be numerically known/input to method-of-moments estimator; geometric decay is sufficient tail regularity. To approximate a full cumulative/global effect, chosen truncation must leave negligible tail, and unknown slow decay threatens this. Under linear convolution finite-T sustained-treatment ATE is sum_{t=0}^{T-1}(T-t)g_t/T (p7); circular model writes tau(q)=<g,q>. Do not casually identify either with sum of only first K coefficients without acknowledging truncation/edge weights. Supports finite-dimensional or sufficiently sparse functionals; no universal guarantee for dense arbitrary q/full growing response.
+
+Realism: permanent habit formation, nonlinear saturation, history-dependent treatment interactions, time-varying effects violate LTI model. Discussion explicitly leaves balanced/optimized designs, cadence choice, time-varying and nonlinear responses for future work. Adversarial baseline robustness is different from arbitrary causal-history robustness.
+
+7. Guo and Liang (2026)
+----------------------
+File: literature/related/Guo and Liang - 2026 - Experimental Design When N Equals One.pdf
+Authors: Wenxuan Guo; Tengyuan Liang.
+Title: Experimental Design When N Equals One.
+Local version: arXiv:2606.28200v2 [stat.ME], 4 Jul 2026; title-page July7,2026.
+Type: Design primarily, with OLS estimators/variance criterion (classify as both but design emphasis). Temporal interference only; not geographical. Targets cumulative/lag-specific coefficient contrasts, optimizing estimation variance rather than new exact tests or general robust CI theory.
+Read: pp2-4 introduction/related work; p17 conclusions. Narrow lookup: pp6-7 Eq3.1 and finite-history implication; AppendixD only displayed assumptions for boundary of robustness, no proof dive.
+
+Eq(3.1), p6, copied:
+  Y_t=alpha+sum_{k=1}^K beta_k Z_{t-k+1}+epsilon_t,
+  epsilon_t iid N(0,sigma^2), t=K,...,T.
+Errors independent of treatment assignment; treatments not outcome adaptive. K fixed as T->infinity. Equivalent potential outcomes:
+  Y_t(z_1,...,z_T)=Y_t(z_{t-K+1},...,z_t)
+                  =alpha+sum_{k=1}^K beta_k z_{t-k+1}+epsilon_t.
+Thus K includes current treatment: at most K-1 past-period carryover, and no anticipation. This is KNOWN/CHOSEN correctly specified model order for the design computation; no unknown-horizon identification theory. Coefficients are stationary and additive. Design-invariant simple estimands come at cost of these structural restrictions.
+
+Assignments follow a possibly time-varying two-state Markov chain with transitions rho_t,gamma_t. Analyze random-switch (constant probabilities) and cycle-switch (fixed deterministic alternating runs) classes. Lag-specific/multiple-effect robust goals favor iid Bernoulli in random-switch class; cumulative effects favor more persistence and can approach problematic boundary designs. Optimal cycle lengths depend explicitly on K and target. Keep any optimality claim conditional on model, target, and candidate design class, not 'the optimal switchback design'.
+
+Known/chosen: K, target vector w or target set, candidate transitions/cadence. Coefficients need not be known for the homoscedastic OLS variance optimization in the specified model, but choosing incorrect K can miss slow tails. Detrending assumes predictable variation can be learned from historical data. Their simulations investigate misspecification but do not establish all-model robustness.
+
+AppendixD AssumptionD.2 (p34) makes finite lag/no anticipation exact even in design-based reinterpretation:
+  Y_t(z_1,...,z_T)=Y_t(z_{t-K+1},...,z_t), t>=K;
+  all these potential outcomes uniformly bounded.
+Generic OLS design-based limit is a design-induced projection; recovering simple lagged causal contrasts needs additional conditions (iid assignment or additive potential outcomes), so appendix is not license to drop all structural interpretation issues. Panel extensions are explicitly future work.
+
+8. Bojinov and Shephard (published2019; local2017v2)
+-------------------------------------------------
+File: literature/related/Bojinov and Shephard - 2019 - Time Series Experiments and Causal Estimands Exact Randomization Tests and Trading.pdf
+Authors: Iavor Bojinov; Neil Shephard.
+Title: Time series experiments and causal estimands: exact randomization tests and trading.
+Local version: arXiv:1706.07840v2 [stat.ME], 18 Jul2017; title-page July19,2017. Published JASA114(528):1665-1682 (2019) as evidenced in local Pankratev references. Do not imply local text is final JASA revision.
+Type: Analysis, foundational estimands and inference; temporal effects within a unit, multi-unit extensions assume no cross-unit spillovers. Exact sharp-null randomization tests plus asymptotic conservative weak-null tests/confidence intervals.
+Read: pp1-3 introduction; pp18-20 literature comparison; pp28-30 conclusion. Narrow lookup: pp4-6 potential outcomes/assignment assumptions; AppendixB.2 p37 optional finite-memory assumption.
+
+No fixed finite carryover cutoff needed for their main history-conditional/lagged effects. Outcome path notation Y_t(w_{1:t}) already rules out future treatment affecting current outcome, while allowing all past assignments. The assumption CALLED 'non-anticipating treatment' is a DIFFERENT restriction on allocation (Assumption2,p6):
+  Pr(W_t=w_t | W_{1:t-1}=w_{1:t-1}, Y_{1:T}(bullet))
+  = Pr(W_t=w_t | W_{1:t-1}=w_{1:t-1}, Y_{1:t-1}(w_{1:t-1})).
+Only observed past outcomes/history may drive allocation, rather than latent or future potential outcomes. Assumption3 requires probabilistic treatment/overlap. This permits sequential randomized adaptive designs with known conditional propensity, unlike independent assignment in Lin-Ding.
+
+Optional Assumption7 (m-period causal impact), AppendixB.2,p37, copied:
+  Y_t(u_{1:t-m-1},w_{t-m:t})=Y_t(u'_{1:t-m-1},w_{t-m:t})
+  for all u,u',w.
+It is an OPTIONAL stronger condition for connecting history-specific estimands to recent-window effects; not a premise for the whole framework. Choice p in lag-p estimand is the contrast horizon, not automatically the true persistence horizon. A lag-p effect can hold realized older history fixed and average over other intervening assignments, thus remain well-defined with arbitrarily long dependence.
+
+Known/chosen: randomization probabilities known by experiment, selected estimand lag p and stepping q. They do not identify the sustained always-treatment vs always-control effect under unrestricted carryover from a lone finite path. Exact tests concern sharp no temporal causal effects; weak average-null tests use CLT and conservative variance. Treating a rejected sharp null as a quantified long-run policy effect would overstate conclusions. Multi-unit extension no-spillover condition must be kept separate from within-unit temporal flexibility.
+
+9. Bojinov, Rambachan, and Shephard (2021)
+---------------------------------------
+File: literature/related/Bojinov et al. - 2021 - Panel Experiments and Dynamic Causal Effects A Finite Population Perspective.pdf
+Authors: Iavor Bojinov; Ashesh Rambachan; Neil Shephard.
+Title: Panel Experiments and Dynamic Causal Effects: A Finite Population Perspective.
+Local version: arXiv:2003.09915v5 [stat.ME],27May2021; title-page May28,2021. Quantitative Economics2021 per existing bibliography trail (do not need volume/pages unless independently verified).
+Type: Analysis; broad panel dynamic causal estimands, randomization-based estimators, exact sharp-null tests and conservative weak-null/asymptotic inference. Temporal carryover arbitrarily long; NO between-unit spillovers in main framework.
+Read: introduction pp1-4; conclusion p27. Narrow lookup: pp4-6 potential outcomes/no anticipation.
+
+Definition1 p5: potential outcome Y_it(w_{i,1:T}) depends only on unit i's own assignment path; source explicitly states this excludes treatment spillovers across units.
+Assumption1 p5:
+  Y_it(w_{i,1:T})=Y_it(w'_{i,1:T}) whenever w_{i,1:t}=w'_{i,1:t},
+  for all units i,t and paths.
+The source immediately says arbitrary dependence on past/current assignments and heterogeneity across units/time are allowed. No finite carryover window/mixing rate is assumed for defining main lag-p effects. Main inferential results impose sequentially randomized, probabilistic, individualistic assignment and regularity. 'Individualistic' assignment conditions can permit own-past outcomes but do not supply cross-unit spillover modeling.
+
+Known/chosen: lag p in target contrast, assignment propensities, averaging across units/time; lag is scientific horizon rather than required true memory. Unknown long memory changes relation between lagged incremental effects and sustained policy effects, not basic identification of these local contrasts. Time fixed effects/unit fixed effects OLS can fail to recover causal contemporaneous effects under carryover plus persistent assignment; their nonparametric estimator specifically handles this. Hence contrast Ferrari/Pankratev's common static models with broader conditions here; neither blanket condemnation nor endorsement of TWFE is appropriate.
+
+10. Basse, Ding, and Toulis (published2023; local2020v2)
+----------------------------------------------------
+File: literature/related/Basse et al. - 2023 - Minimax Designs for Causal Effects in Temporal Experiments with Treatment Habituation.pdf
+Authors: Guillaume Basse; Yi Ding; Panos Toulis.
+Title: Minimax designs for causal effects in temporal experiments with treatment habituation.
+Local version: arXiv:1908.03531v2 [stat.ME],4Jun2020; title-page June5,2020. Published Biometrika110(1):155-168 (2023) per Guo-Liang's local refs.
+Type: Design primarily; joint estimators/risk and optional randomization inference. Broader multi-unit temporal habituation experiments, not conventional switching one aggregate unit as the sole design. Temporal interference only; between-unit interference excluded. Focus is estimation of habituation and instantaneous causal effects, minimax risk rather than testing as primary objective.
+Read: pp3-4 introduction/related work; pp18-19 concluding remarks. Narrow lookup: p6 assumptions; pp15-16 finite-carryover recycling extension.
+
+Assumption1 (No interference), p6:
+  Z_i=Z'_i => Y_it(Z)=Y_it(Z'), for all Z,Z' and t=1,...,T.
+Assumption2 (Non-anticipating outcome), p6, copied prose:
+  'The outcome of unit i at time t depends only on the treatment history up to time t.'
+Main minimax designs permit effects persisting indefinitely. They randomize units to always-treatment, always-control, or pulse/wedge sequences to distinguish habituation vs instantaneous effects. They do NOT assume a finite k for their whole method.
+
+Optional Assumption3 (k-order carryovers), p15:
+  Y_it(e_{t'})=Y_it(0), for all 0<t'<=t-k, all i,t.
+Here e_t' means a SINGLE pulse at t', not arbitrary treatment history. This is a pulse-specific finite-washout restriction, weaker/different from global equality for all histories sharing a recent window. It lets the design recycle units treated sufficiently far in the past into the current control group. Known/chosen k needed to safely recycle those units; unknown persistence means abstain from recycling or risk contamination, while baseline designs remain available. Core results already recycle not-yet-treated units under nonanticipation without any finite washout.
+
+Realism: exact disappearance after k is a substantive assumption particularly questionable for behavioral learning, but it is not essential to the baseline habituation contrasts. Minimax designs minimize worst-case risk in a specified class of outcome schedules/designs, not necessarily expected risk; concluding remarks stress this limitation. Connect to switchbacks as design-based temporal foundation, not an independent empirical switchback result.
+
+11. Jiang and Ding (local2026v3; file label2025)
+---------------------------------------------
+File: literature/related/Jiang and Ding - 2025 - Principled Analysis of Crossover Designs Causal Effects Efficient Estimation and Robust Inference.pdf
+Authors: Zhichao Jiang; Peng Ding.
+Title: Principled analysis of crossover designs: causal effects, efficient estimation, and robust inference.
+Local version: arXiv:2511.09215v3 [stat.ME],10Aug2026; title-page August11,2026. Bibliography may key jiangding2026 and explain first posted2025, reviewed2026v3. Do not keep citation year2025 without version note.
+Type: Analysis of given crossover designs; design identifiability implications rather than optimized new assignment. Multi-unit sequence randomization; temporal effects, no between-unit interference. Estimands, identification/unbiased estimation, restricted weighted least squares, conservative design-based EHW variance; tests of assumptions are extensions, not primary exact Fisher theory.
+Read: pp1-4 intro/related work; pp28-29 discussion. Narrow lookup: pp5-7 assumptions; pp11-12 two-sequence identification example.
+
+No anticipation Assumption1, p5:
+  Y_it(z)=Y_it(z') if z_{[1,t]}=z'_{[1,t]}.
+Finite-history option Assumption2 (No more than k-th order carryover effect),p6:
+  Y_it(z)=Y_it(z') if z_{[t-k+1,t]}=z'_{[t-k+1,t]},
+  equivalently z_{t-j+1}=z'_{t-j+1} for j=1,...,k.
+CRITICAL indexing: k counts total assignments including current. k=1 means ZERO lagged carryover. Translate to Bojinov/Liu m=k-1, not m=k. The assumption name is slightly misleading if read as allowing k prior lags; preserve displayed equation and explain.
+
+Assumption3 separately restricts temporal invariance of effects of length-k treatment sequences. Do not conflate time-invariance with finite memory; stationary-effect restrictions can help identify otherwise aliased contrasts even when baseline levels vary over time. The authors discuss plausibility: short-acting interventions/adequate washout may support finite history; persistent biological/behavioral effects, delayed responses, cumulative exposure and adaptation may violate it.
+
+Known/chosen: which assumption set/k to impose is chosen with subject-matter justification; it controls rank/identification as well as precision. With all four sequences AA,AB,BA,BB, two-period instantaneous/carryover effects can be identified with only no anticipation. With AB,BA alone, unrestricted second-period direct and carryover effects are aliased; extra assumptions essential. Therefore 'unknown m always prevents causal inference' is false, while 'unrestricted crossover sequences always identify all effects' is also false. No automatic data-driven determination of k is given. Framework includes tests of restrictions where data support them; cannot test every missing counterfactual restriction with insufficient sequence support.
+
+Model robustness: regression is a working estimator and need not be a correct outcome model, but causal equality assumptions encoded as coefficient restrictions remain substantive. Efficient weights are generally unknown and estimated. Discussion leaves dropout/time-to-event and extended covariate adjustment for future work.
+
+12. Ni, Bojinov, and Zhao (2024 local HBS working paper)
+----------------------------------------------------
+File: literature/related/Ni et al. - 2024 - Design of Panel Experiments with Spatial and Temporal Interference.pdf
+Authors: Tu Ni; Iavor Bojinov; Jinglong Zhao.
+Title: Design of Panel Experiments with Spatial and Temporal Interference.
+Local version: HBS Working Paper24-058; front matter copyright2023,2024. No exact manuscript date visible; bibliography year2024 appropriate. The file is NOT the inaccessible2026 revision entitled Design AND ANALYSIS of Panel Experiments with Spatial and Temporal Interference (SSRN4466598). Do not count them as two distinct studies.
+Type: Both design and analysis. Explicitly BOTH geographical and temporal interference. IPW global effect estimation, CLT and confidence intervals; minimax balanced temporal randomization and randomized spatial clustering ('random shaking').
+Read: pp2-6 introduction/related work; pp26-27 conclusion. Narrow lookup: p8 assumptions (PDFp10).
+
+Assumption1 (Neighborhood spatial interference),p8:
+  Y_it(w_{1:N,1:T})=Y_it(w'_{1:N,1:T}) whenever
+  w_{N(i),1:T}=w'_{N(i),1:T}.
+Neighbors on a two-dimensional lattice; units should be aggregated/defined with domain knowledge so spillovers are local. Geometry and neighborhood are substantive inputs, not estimated in its core theorem.
+Assumption2 (Limited carryover effects),p8:
+  Y_it(w_{1:N,1:T})=Y_it(w'_{1:N,1:T}) whenever
+  w_{1:N,t-1:t}=w'_{1:N,t-1:t}.
+This specifies dependence on ONLY current and immediately preceding assignments and simultaneously rules out anticipation, since equality does not require agreement on future assignments. Combined assumptions reduce dependence to local neighbors at current/previous time. Source notes general m>1 could be accommodated while presenting m=1 for simplicity.
+
+Known/chosen: exact one-period upper bound is assumed, with a period selected to encompass physical carryover duration (example 30-60min surge persistence -> 1h period). This effectively requires domain knowledge of an upper bound; selecting units of time does not prove that residual effects are zero. 'Carryover lasts around60min' is not a rigorous support for an exact-zero cutoff under long tails. Spatial neighborhood likewise must cover true propagation. Cluster size optimized within lattice assumptions; general graph results not proved, although simulations/heuristic aggregation address robustness.
+
+Core distinction from Bojinov panel2021: panel2021 permits arbitrary within-unit history but excludes between-unit spillovers, whereas Ni2024 explicitly handles both using strong known exposure restrictions. Conclusion suggests biased Hajek alternatives, bias-variance tradeoffs under imperfect neighbor aggregation, model-informed burn-in, adaptive monitoring as future directions; empirical power gains depend on their configurations and are not universal guarantees.
+
+Suggested manuscript organization for these sources
+-------------------------------------------------
+- Framework and estimands: BS2019/BRS2021 distinguish lagged incremental/history-conditional effects from global policy contrasts; Jiang-Ding shows sequence support plus assumptions jointly determine identification.
+- Classification table: finite-memory arbitrary outcomes (Liu-Zhong, optional Lin-Ding m-condition, Ni2024); infinite-history but decaying/structural (Lin-Ding coupling, Liang-Recht LTI); broader arbitrary-history foundations (BS/BRS, Basse baseline); static no-carryover practice (Ferrari, Pankratev power); simulation sensitivity (Pankratev VR); finite-order structural optimal design (Guo-Liang).
+- Explicit assumption audit: use equations above and exact source numbers/page locators, carefully harmonize lag indexing. Known horizon is needed for certain global-effect procedures and recycling, not all dynamic causal effects. Unknown persistence creates a bias/variance and target-identification issue rather than a single universal impossibility.
+- Inference: fully sharp null vs partially sharp total-effect null vs average weak null; finite-sample CRT vs asymptotic studentization/HAC. Randomization doesn't erase interference or permit arbitrary outcome imputations.
+- Practice/limitations: cadence gains with serial noise do not establish causal washout, and precision reduction does not repair a wrong estimand. Diagnostics reject assumptions but cannot certify exact zero tails. Adaptive pilot/sample separation or bounded-tail sensitivity are reasonable research directions rather than methods already proved in every cited paper.

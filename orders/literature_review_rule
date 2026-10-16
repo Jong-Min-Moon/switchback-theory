@@ -1,0 +1,11 @@
+- Read intro sections, literature review (or previous works or similar) sections and discussion (or conclusion) sections.
+- Do not dive deep into main sections 
+
+check if:
+- the paper is about designing only, analysis only, or does both.
+- the paper handles temporal carryover only, or geographical spillover, or both
+- the paper is about hypothesis testing or causal inference (causal estimand and confidence intervals)
+
+look closely, and summarize in detail, with explicitly copying the assumption:
+- what kind of assumption is made about temporal carryover - fixed carryover window? geometric decay?
+- in the carryover assumption, which value is assumed to be known? is it too unrealistic to assume that value is known?
