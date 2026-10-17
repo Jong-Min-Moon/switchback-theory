@@ -1,0 +1,29 @@
+\contentsline {section}{\numberline {1}Introduction and scope}{3}{section.1}%
+\contentsline {section}{\numberline {2}A framework for comparing claims}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}An experimental design does not determine a unique estimand}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Three distinct knowledge requirements}{5}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Carryover assumptions and methods for switchback experiments}{9}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Design under finite and approximate carryover}{9}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}$m$-carryover effects}{9}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Approximate memory requires explicit control of the remaining bias}{12}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}Persistent carryover and models of system dynamics}{13}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Geometric mixing with an unobserved state}{14}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Generalization}{15}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Joint temporal and spatial interference}{16}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Observable stationary dynamics and inferential conservatism}{17}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}Reinforcement-learning estimators and the meaning of carryover strength}{18}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}Structural models under congestion and partial observability}{20}{subsubsection.3.2.6}%
+\contentsline {subsubsection}{\numberline {3.2.7}Learning assignments and randomizing treatment durations}{21}{subsubsection.3.2.7}%
+\contentsline {subsubsection}{\numberline {3.2.8}Short reward trajectories and residual bias}{22}{subsubsection.3.2.8}%
+\contentsline {section}{\numberline {4}Inferential targets, diagnostics, and practical precision}{23}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Dynamic effects need not be sustained-policy effects}{23}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Partially sharp nulls and what diagnostics establish}{25}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Inference with decaying rather than truncated effects}{26}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Model order and sequence support determine feasible inference}{29}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Spatial exposure restrictions and practical precision}{31}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Rollout decisions under temporal restrictions}{33}{section.5}%
+\contentsline {section}{\numberline {6}Critical synthesis and research priorities}{34}{section.6}%
+\contentsline {subsection}{\numberline {6.1}What normality and precision leave unresolved}{34}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Which assumptions are credible, and for which intervention?}{35}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}A reporting sequence and open problems}{36}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Conclusion}{36}{section.7}%

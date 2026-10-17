@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: /Users/jmmoon/Documents/switchback-theory/.texpadtmp/main.aux
+The style file: agsm.bst
+Database file #1: ../switchback-review.bib
+You've used 34 entries,
+            2909 wiz_defined-function locations,
+            857 strings with 12736 characters,
+and the built_in function-call counts, 150005 in all, are:
+= -- 24179
+> -- 2491
+< -- 5
++ -- 11682
+- -- 763
+* -- 13104
+:= -- 30068
+add.period$ -- 57
+call.type$ -- 34
+change.case$ -- 476
+chr.to.int$ -- 33
+cite$ -- 34
+duplicate$ -- 496
+empty$ -- 1079
+format.name$ -- 891
+if$ -- 26978
+int.to.chr$ -- 6
+int.to.str$ -- 0
+missing$ -- 14
+newline$ -- 160
+num.names$ -- 360
+pop$ -- 200
+preamble$ -- 1
+purify$ -- 510
+quote$ -- 0
+skip$ -- 426
+stack$ -- 0
+substring$ -- 33967
+swap$ -- 98
+text.length$ -- 481
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 136
+warning$ -- 0
+while$ -- 739
+width$ -- 0
+write$ -- 537
